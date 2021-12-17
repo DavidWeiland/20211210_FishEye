@@ -4,16 +4,15 @@ const mediaRoutes = require('./routes/Media')
 const photographerRoutes = require('./routes/Photographer')
 const userRoutes = require('./routes/User')
 const path = require('path')
-const app = express()
 
 mongoose.connect('mongodb+srv://davidWeiland:Bwqtthc1@cluster0.bdouf.mongodb.net/FishEyeDatabase?retryWrites=true&w=majority', {
   useNewUrlParser: true,
   useUnifiedTopology:true
 })
-  .then(() => console.log('Connexion à MongoDB réussie !'))
-  .catch(() => console.log('Connexion à MongoDB échouée !'))
+.then(() => console.log('Connexion à MongoDB réussie !'))
+.catch(() => console.log('Connexion à MongoDB échouée !'))
 
-app.use(express.json())
+const app = express()
 
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*')
@@ -22,8 +21,11 @@ app.use((req, res, next) => {
   next()
 })
 
-app.use('/api/media', mediaRoutes)
+app.use(express.json())
+
 app.use('/images', express.static(path.join(__dirname, 'images')))
+
+app.use('/api/media', mediaRoutes)
 app.use('/api/photographer', photographerRoutes)
 app.use('/api/auth', userRoutes)
 

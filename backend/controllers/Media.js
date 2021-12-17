@@ -3,7 +3,6 @@ const Media = require('../models/Media')
 
 exports.createMedia = (req, res, next) => {
   const mediaObject = JSON.parse(req.body.thing)
-  console.log(mediaObject)
   delete mediaObject._id
   const media = new Media({
     ...mediaObject,
