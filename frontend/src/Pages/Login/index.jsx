@@ -1,8 +1,9 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Navigate } from 'react-router-dom'
 import { signup, login } from '../../Features/user'
-import { useStore } from 'react-redux'
+import { useSelector, useStore } from 'react-redux'
 import styled from 'styled-components'
+import { selectUser } from '../../Utils/selectors'
 
 const LoginWrapper = styled.div`
   margin:auto;
@@ -17,60 +18,94 @@ const LoginWrapper = styled.div`
 const FormWrapper = styled.div`
   margin: auto;
   height: 70%;
-  width: 70%;
+  width: 50%;
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: space-around;
+`
+
+const ButtonWrapper = styled.div`
+  margin: auto;
+  height: 30%;
+  width: 50%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
 `
 
 const InputWrapper = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-around;
+`
+
+const Label = styled.label`
+  font-size: 36px;
+  color:#D3573C;
 `
 
 const StyledInput = styled.input`
-  width:100%
+  border-radius:15px 15px 15px 15px;
+  border:solid 3px grey;
+  width:60%;
+  height:30px;
+  font-size: 20px;
+  color:rgba(0, 0, 0, 0.7);
+  box-shadow: inset 0px 4px 12px rgba(0, 0, 0, 0.25);
+  padding-left:15px;
+  &:focus{
+    background-color:rgba(0, 0, 0, 0.2);
+    color:#901C1C;
+    };
 `
 
-const ButtonWrapper = styled.div`
-  margin: auto;
-  height: 30%;
-  width: 70%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-around;
+const StyledButton = styled.button`
+background-color:#D3573C;
+  margin-left:70px;
+  margin-right:70px;
+  width:70px;
+  height:70px;
+  border-radius:100%;
+  border: 0;
+  box-shadow:0px 4px 12px rgba(0, 0, 0, 0.25);
+  box-shadow:inset -2px -4px 12px rgba(0, 0, 0, 0.5), inset 2px 4px 12px rgba(255, 255, 255, 0.5);
+`
+const Icon = styled.i`
+ color:rgba(0, 0, 0, 0.8);
+ font-size:40px;
 `
 
 function LoginPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const store = useStore()
-  const navigate = useNavigate()
-  
+  //const navigate = useNavigate()
 
-  const create = () => {
+  const userStatus = useSelector(selectUser).status
+  
+//vers une page de creation
+  /* function create() {
     const body = { email, password }
     signup(store, body)
-  }
-
-  const connect = () => {
+  } */
+  
+  function connect() {
     const body = { email, password }
     login(store, body)
-    setEmail('')
-    setPassword('')
-    navigate('/profile')
+  }
+
+  if (userStatus === 'resolved'){
+    return <Navigate to='/profile'/>
   }
 
   return (
     <LoginWrapper>
       <FormWrapper>
         <InputWrapper>
-          <label htmlFor="email">Username</label>
+          <Label htmlFor="email">Email</Label>
           <StyledInput
             type="text"
             id="email"
@@ -80,7 +115,7 @@ function LoginPage() {
           />
         </InputWrapper>
         <InputWrapper>
-          <label htmlFor="password">Password</label>
+          <Label htmlFor="password">Password</Label>
           <StyledInput
             type="password"
             id="password"
@@ -91,12 +126,12 @@ function LoginPage() {
         </InputWrapper>
       </FormWrapper>
       <ButtonWrapper>
-      <button className="signup" onClick={connect}>
-        Connection
-      </button>
-      <button className="signup" onClick={create}>
-        New user
-      </button>
+      <StyledButton className="signup" onClick={connect}>
+        <Icon className='fa fa-check'/>
+      </StyledButton>
+      {/* <StyledButton className="signup" onClick={create}>
+        <Icon className='fa fa-user-plus'/>
+      </StyledButton> */}
       </ButtonWrapper>
     </LoginWrapper>
   )
