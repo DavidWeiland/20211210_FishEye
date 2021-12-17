@@ -128,7 +128,6 @@ export default function Home() {
       const tagsMock = [ 'portrait', 'art', 'architecture', 'animals', 'fashions', 'travel', 'sport', 'events' ]
       const tagsData = tags.length <= 0 ? 
         tagsMock : tags
-      console.log(tagsData)
       for (let i = 0; i < tagsData.length; i++) {
         if (Ptag === tagsData[i]) {
           if (photographers.includes(photographer)) {
@@ -228,7 +227,7 @@ export default function Home() {
           </section>
         ) : (
           <section>
-            {photographers.map(({ index, _id, name, city, country, tags, tagline, price, portrait }) => (
+            {photographers.map(({ index, _id, name, city, country, tags, tagline, price, portraitUrl }) => (
               <Card
                 key={`${index}-${name}`}
                 id={_id}
@@ -238,7 +237,7 @@ export default function Home() {
                 tags={tags}
                 tagline={tagline}
                 price={price}
-                portraitUrl={portrait}
+                portraitUrl={portraitUrl}
               />
             ))}
           </section>
