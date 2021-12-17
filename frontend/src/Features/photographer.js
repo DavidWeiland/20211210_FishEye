@@ -68,8 +68,12 @@ export async function getOnePhotographer(store, userId, token) {
   }
 }
 
-export async function createOnePhotographer(store, body, token) {
+export async function createOnePhotographer(store, thing, image, token) {
   const status = selectPhotographer(store.getState()).status
+  const body = new FormData()
+  body.append('thing', JSON.stringify(thing))
+  body.append('image', image, thing.name)
+  
   const axiosBody = {
     method: 'post',
     url: `http://localhost:3001/api/photographer/private`,
@@ -82,20 +86,29 @@ export async function createOnePhotographer(store, body, token) {
   store.dispatch(actions.fetching())
   try {
     const response = await axios(axiosBody)
-    const resData = await response.data.body
-    store.dispatch(actions.resolved(resData))
+    const data = await response.data
+    store.dispatch(actions.resolved(data))
   } catch (error) {
     store.dispatch(actions.rejected(error))
   }
 }
 
-export async function modifyOnePhotographer(store, photographerId, token, PhotographerBody) {
+export async function modifyOnePhotographer(store, photographerId, token, image, thing) {
   const status = selectPhotographer(store.getState()).status
+  let body
+  if (typeof image === 'string') {
+    thing.portraitUrl = image;
+    body = thing;
+  } else {
+    body = new FormData();
+    body.append('thing', JSON.stringify(thing));
+    body.append('image', image, thing.name);
+  }
   const axiosBody = {
     method: 'put',
     url: `http://localhost:3001/api/photographer/private/${photographerId}`,
     headers: { authorization: `Bearer ${token}` },
-    data: PhotographerBody
+    data: body
   }
   if (status === 'pending' || status === 'updating') {
     return
@@ -103,8 +116,8 @@ export async function modifyOnePhotographer(store, photographerId, token, Photog
   store.dispatch(actions.fetching())
   try {
     const response = await axios(axiosBody)
-    const resData = await response.data.body
-    store.dispatch(actions.resolved(resData))
+    const data = await response.data
+    store.dispatch(actions.resolved(data))
   } catch (error) {
     store.dispatch(actions.rejected(error))
   }

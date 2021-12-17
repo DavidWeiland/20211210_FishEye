@@ -61,8 +61,8 @@ export async function signup(store, body) {
   store.dispatch(actions.fetching())
   try {
     const response = await axios(axiosBody)
-    const resData = await response.data.body
-    store.dispatch(actions.resolved(resData))
+    const data = await response.data
+    store.dispatch(actions.resolved(data))
   } catch (error) {
     store.dispatch(actions.rejected(error))
   }
@@ -81,11 +81,13 @@ export async function login(store, body) {
   store.dispatch(actions.fetching())
   try {
     const response = await axios(axiosBody)
-    const resData = await response.data
-    store.dispatch(actions.resolved(resData))
+    const data = await response.data
+    store.dispatch(actions.resolved(data))
   } catch (error) {
     store.dispatch(actions.rejected(error))
   }
 }
+
+export const { resolved } = actions
 
 export default reducer

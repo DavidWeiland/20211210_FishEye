@@ -1,9 +1,9 @@
 import { useState } from 'react'
-import { Navigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { signup, login } from '../../Features/user'
-import { useSelector, useStore } from 'react-redux'
-import styled from 'styled-components'
+import { useStore, useSelector } from 'react-redux'
 import { selectUser } from '../../Utils/selectors'
+import styled from 'styled-components'
 
 const LoginWrapper = styled.div`
   margin:auto;
@@ -23,7 +23,6 @@ const FormWrapper = styled.div`
   flex-direction: column;
   justify-content: space-around;
 `
-
 const ButtonWrapper = styled.div`
   margin: auto;
   height: 30%;
@@ -33,7 +32,6 @@ const ButtonWrapper = styled.div`
   align-items: center;
   justify-content: center;
 `
-
 const InputWrapper = styled.div`
   width: 100%;
   display: flex;
@@ -41,12 +39,10 @@ const InputWrapper = styled.div`
   align-items: center;
   justify-content: space-around;
 `
-
 const Label = styled.label`
   font-size: 36px;
   color:#D3573C;
 `
-
 const StyledInput = styled.input`
   border-radius:15px 15px 15px 15px;
   border:solid 3px grey;
@@ -61,7 +57,6 @@ const StyledInput = styled.input`
     color:#901C1C;
     };
 `
-
 const StyledButton = styled.button`
 background-color:#D3573C;
   margin-left:70px;
@@ -79,26 +74,32 @@ const Icon = styled.i`
 `
 
 function LoginPage() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const [ email, setEmail ] = useState('')
+  const [ password, setPassword ] = useState('')
+  
   const store = useStore()
-  //const navigate = useNavigate()
+  const navigate = useNavigate()
 
   const userStatus = useSelector(selectUser).status
+  const userId = useSelector(selectUser).data?.userId
   
-//vers une page de creation
-  /* function create() {
-    const body = { email, password }
-    signup(store, body)
-  } */
+  const body = { email, password }
   
   function connect() {
-    const body = { email, password }
     login(store, body)
   }
 
-  if (userStatus === 'resolved'){
-    return <Navigate to='/profile'/>
+  function create() {
+    signup(store, body)
+  }
+
+  if (userStatus === 'resolved') {
+    if (userId) {
+      navigate('/profile')
+    } else {
+      login(store, body)
+      navigate('/new_photographer')
+    }
   }
 
   return (
@@ -129,9 +130,9 @@ function LoginPage() {
       <StyledButton className="signup" onClick={connect}>
         <Icon className='fa fa-check'/>
       </StyledButton>
-      {/* <StyledButton className="signup" onClick={create}>
+      <StyledButton className="signup" onClick={create}>
         <Icon className='fa fa-user-plus'/>
-      </StyledButton> */}
+      </StyledButton>
       </ButtonWrapper>
     </LoginWrapper>
   )
