@@ -1,0 +1,99 @@
+.headerHomePageNav{
+    position: relative;
+    top:-100px;
+    width: 100%;
+    height: 100px;
+    display: flex;
+    justify-content: center ;
+    align-items: center;
+}
+
+.headerHomePageTitle{
+position: relative;
+top:-200px;
+    width: 100%;
+    height: 100px;
+    margin:0;
+    display: flex;
+    justify-content: flex-end ;
+    align-items: center;
+}
+
+.titlePrincipal{
+    margin-right: 40px;
+    font-size: 30px;
+    font-weight: normal;
+}
+
+.nav{
+    width: 50%;
+    height: 100px;
+    display : flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    z-index:10;
+}
+
+.retour{
+    position:fixed;
+    top:5vh;
+    left:50%;
+    margin-left: -91px;
+    cursor: pointer;
+    width: 182px;
+    height: 30px;
+    background-color:#DB8876;
+    color:#000000;
+    border-radius: 5px;
+    font-size: 18px;
+    text-decoration: none;
+    text-align: center;
+    padding-top: 2px;
+}
+
+.form__option {
+    width: 100%;
+    height: 16px;
+    margin:auto;
+    margin-top: 18px;
+    margin-bottom: 15px;
+    padding:0;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
+    text-decoration: none;
+    list-style-type: none;
+}
+
+.btn__option{
+    box-sizing: border-box;
+    width: auto;
+    display: flex;
+    justify-content: center;
+}
+
+.label__option{
+    border: 0.5px solid #C4C4C4;
+    border-radius: 11px;
+    display: inline-block;
+    height: 100%;
+    width: 100%;
+    padding-left: 10%;
+    padding-right: 10%;
+    font-size: 12px;
+    font-family: "DM sans", arial;
+    color:#901C1C;
+    text-align: center;
+    cursor:pointer;
+}
+.label__option:hover{
+    background-color: #DB8876;
+    color:#000000;
+}
+.label__option[aria-checked=true]{
+    background-color: #901C1C;
+    color:#FFF;
+}

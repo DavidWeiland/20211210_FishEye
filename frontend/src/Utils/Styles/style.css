@@ -7,164 +7,18 @@ body{
     box-sizing: border-box;
 }
 
-.banner{
-    display: flex;
-    max-width: 90%;
+#root{
     margin:auto;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    box-sizing: border-box;
-    background-color: #FFF;
-}
-.logo__container{
-    /* background: url(../Images/logo.svg)center center / 100% 100% no-repeat; */
-    width: 200px;
-    height: 50px;
-    margin-top:40px;
-    color:transparent;
-    cursor: pointer;
+    max-width: 90%;
 }
 
-.titrePrincipal{
-    font-size: 36px;
-    margin-top: 40px;
-    font-weight: normal;
-}
-.retour{
-    position:fixed;
-    top:5vh;
-    left:50%;
-    margin-left: -91px;
-    cursor: pointer;
-    width: 182px;
-    height: 30px;
-    background-color:#DB8876;
-    color:#000000;
-    border-radius: 5px;
-    font-size: 18px;
-    text-decoration: none;
-    text-align: center;
-    padding-top: 2px;
-}
-.nav{
-    width: 700px;
-    height: 49px;
-    margin-top: 40px;
-    box-sizing: border-box;
-    display : flex;
-    justify-content: center;
-}
-.form__option {
-    width: 100%;
-    height: 16px;
-    margin-top: 18px;
-    margin-bottom: 15px;
-    padding:0;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    text-decoration: none;
-    list-style-type: none;
-}
-.btn__option{
-    box-sizing: border-box;
-    width: auto;
-    margin-right:5%;
-    display: flex;
-    justify-content: center;
-}
-.btn__option--pagePh{
-    margin-right:10%;
-}
-.label__option{
-    border: 0.5px solid #C4C4C4;
-    border-radius: 11px;
-    display: inline-block;
-    height: 100%;
-    width: 100%;
-    padding-left: 10%;
-    padding-right: 10%;
-    font-size: 12px;
-    font-family: "DM sans", arial;
-    color:#901C1C;
-    text-align: center;
-    cursor:pointer;
-}
-.label__option:hover{
-    background-color: #DB8876;
-    color:#000000;
-}
-.label__option[aria-checked=true]{
-    background-color: #901C1C;
-    color:#FFF;
-}
-
-main{
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
-#section{
+section{
     width: 100%;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: space-around;
-}
-
-.vignette__container{
-    margin: 2%;
-}
-.vignette{
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 400px;
-    height: auto;
-    margin:1%;
-    text-decoration: none;
-    box-sizing: border-box;
-    padding:2%;
-    
-}
-.vignette__photo, .vignet__photo{
-    width: 200px;
-    height: 200px;
-    object-fit: cover;
-    border-radius: 100%;
-    background: #C4C4C4;
-    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.25);
-}
-.vignette__titre{
-    font-size: 36px;
-    margin:0;
-    margin-top: 20px;
-    color:#D3573C;
-    text-align: center;
-}
-.vignette__city{
-    margin:0;
-    font-size: 13px;
-    color:#901C1C;
-    text-align: center;
-}
-.vignette__tagline{
-    margin:0;
-    font-size: 11px;
-    color:#000000;
-    text-align: center;
-}
-.vignette__price{
-    margin:0;
-    font-size: 11px;
-    color:#757575;
-    text-align: center;
+    margin-top: -150px;
 }
 
 #sectionPhotographe{
@@ -173,6 +27,10 @@ main{
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+.btn__option--pagePh{
+    margin-right:10%;
 }
 
 .page__photographe--info{
@@ -199,15 +57,15 @@ main{
     justify-content: flex-start;
 }
 
-.vignet__photographe--label .vignette__titre{
+.vignet__photographe--label .vignet__title{
     margin-top: 0;
     font-size: 64px;
     text-align: left;
 }
-.vignet__photographe--label .vignette__city{
+.vignet__photographe--label .vignet__city{
     font-size: 24px;
 }
-.vignet__photographe--label .vignette__tagline{
+.vignet__photographe--label .vignet__tagline{
     color:#525252;
     font-size: 18px;
 }
@@ -215,6 +73,7 @@ main{
 .vignet__photographe--photo{
     width: auto;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     margin:initial;
 }
