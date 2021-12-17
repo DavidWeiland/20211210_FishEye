@@ -1,424 +1,453 @@
 import { useState, useEffect } from 'react'
-//import { useNavigate } from 'react-router-dom'
-import DefaultPicture from '../../Assets/Icons/user-circle.svg'
-import editIcon from '../../Assets/Icons/pencil-alt.svg'
 import { getOnePhotographer, createOnePhotographer, modifyOnePhotographer } from '../../Features/photographer'
 import { useStore, useSelector } from 'react-redux'
-import { selectUser, selectPhotographer, selectMedias } from '../../Utils/selectors'
+import { selectUser, selectPhotographer } from '../../Utils/selectors'
 import styled from 'styled-components'
 import '../../Utils/Styles/style.css'
+import { useNavigate } from 'react-router-dom'
+import TagsComponent from '../../Components/TagsComponent'
 
-const GeneralWrapper = styled.div`
-  margin: auto;
+const VignetTitle = styled.h1`
+  font-size: 36px;
+  margin:0;
+  margin-top: 20px;
+  color:#D3573C;
+  text-align: center;
+`
+const VignetCity = styled.p`
+  margin:0;
+  font-size: 13px;
+  color:#901C1C;
+  text-align: center;
+`
+const VignetTagline = styled.p`
+  margin:0;
+  font-size: 11px;
+  color:#000000;
+  text-align: center;
+`
+const VignetPhoto = styled.img`
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 100%;
+  background: #C4C4C4;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.25);
+`
+
+
+
+
+const CreateWrapper = styled.div`
+background:#FF0;
+  margin:auto;
+  margin-top: 3rem;
   width: 100%;
-  height: 80vh;
+  height: auto;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: space-around;
 `
-const ProfileWrapper = styled.div`
+const FormWrapper = styled.div`
+background:#F0F;
   margin: auto;
-  height: 95%;
-  width: 47%;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-start;
-  border: 1px black solid;
-`
-const HeaderProfile = styled.div`
-  margin: 1%;
-  height: 18%;
-  width: 98%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-`
-const ImageProfile = styled.img`
-width:120px;
-height:120px;
-`
-const DivImage = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: flex-end;
-  background: linear-gradient(
-    rgba(0, 0, 0, 0) 60%,
-    rgba(0, 0, 0, 0.6),
-    rgba(0, 0, 0, 0.9),
-    rgba(0, 0, 0, 1)
-  );
-  width: 115px;
-  height: 115px;
-  border-radius: 60px;
-  margin-top: -118px;
-  z-index: 5;
-`
-const SpanImage = styled.span`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color:rgba(255,255,255, 0.8);
-  width: 115px;
-  height: 50px;
-  border-radius: 0 0 100px 100px;
-  margin-top: -120px;
-  z-index: 10;
-  cursor:pointer;
-`
-
-const InfoWrapper = styled.div`
-  margin: 0;
-  height: 70%;
+  height: auto;
   width: 100%;
   display: flex;
   flex-direction: row;
-  align-items: flex-start;
-  justify-content: flex-start;
+  flex-wrap:wrap;
+  justify-content: space-around;
 `
 
 const ButtonWrapper = styled.div`
-  margin: 0;
-  height: auto;
-  height: 10%;
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-around;
-`
-
-const LabelInput = styled.label`
-    color:#312E2E;
-    font-size: 15px;
-    font-weight: 900;
-    display: inline-block;
-`
-const InputWrapper = styled.div`
-  margin:auto;
-  width: 95%;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: space-around;
-`
-const InputWrapperLine = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-`
-const StyledInput = styled.input`
-  width: 85%;
-`
-const RadioButtonWrapper = styled.div`
   margin: auto;
-  height: 95%;
-  width: 95%;
+  height: 30%;
+  width: 50%;
   display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
+  flex-direction: row;
   align-items: center;
-  justify-content: space-around;
+  justify-content: center;
 `
 
-const EditButtonWrapper = styled.div`
-  background-color : rgba(0, 0, 0, 0.8);
-  width: 30px;
-  height: 30px;
-  border-radius: 100%;
-  display:flex;
-  justify-content:center;
-  align-items:center;
+const InputWrapper = styled.div`
+  width: 80%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap:nowrap;
+  align-items: flex-start;
+  justify-content: flex-start;
 `
-const EditButton = styled.img`
-  width: 15px;
-  height: 15px;
-  border-bottom: rgba(255, 255, 255, 0.9) solid 1px;
-  cursor: pointer;
+
+const StyledInputTitle = styled.input`
+  margin:1%;
+  margin-top: 20px;
+  border:0;
+  width:100%;
+  height:40px;
+  font-size: 36px;
+  font-weight : bold;
+  color:#D3573C;
+  box-shadow: inset 0px 4px 12px rgba(0, 0, 0, 0.25);
+  padding-left:5px;
+  &:focus{
+    background-color:rgba(0, 0, 0, 0.2);
+    };
+`
+const StyledInputCity = styled.input`
+  margin:1%;
+  border:0;
+  width:100%;
+  height:15px;
+  font-size: 13px;
+  font-weight : normal;
+  color:#901C1C;
+  box-shadow: inset 0px 4px 12px rgba(0, 0, 0, 0.25);
+  padding-left:5px;
+  &:focus{
+    background-color:rgba(0, 0, 0, 0.2);
+    };
+`
+const StyledInputTagline = styled.input`
+  margin:1%;
+  border:0;
+  width:100%;
+  height:13px;
+  font-size: 11px;
+  font-weight : normal;
+  color:#000000;
+  box-shadow: inset 0px 4px 12px rgba(0, 0, 0, 0.25);
+  padding-left:5px;
+  &:focus{
+    background-color:rgba(0, 0, 0, 0.2);
+    };
+`
+
+const StyledInput = styled.input`
+  margin:1%;
+  border:0;
+  width:100%;
+  height:auto;
+  font-size: auto;
+  font-weight : normal;
+  color:#D3573C;
+  padding-left:5px;
+  &:focus{
+    background-color:rgba(0, 0, 0, 0.2);
+    };
 `
 
 
-function Profile() {
+
+const StyledButton = styled.button`
+background-color:#D3573C;
+  margin-left:70px;
+  margin-right:70px;
+  width:70px;
+  height:70px;
+  border-radius:100%;
+  border: 0;
+  box-shadow:inset -2px -4px 12px rgba(0, 0, 0, 0.8), inset 2px 4px 12px rgba(255, 255, 255, 0.8), 2px 4px 12px rgba(0, 0, 0, 0.8) ;
+`
+const Icon = styled.i`
+ color:rgba(0, 0, 0, 0.8);
+ font-size:40px;
+`
+
+export default function Profile() {
   const store = useStore()
-  const userId = useSelector(selectUser).data?.userId
-  const token = useSelector(selectUser).data?.token
-  const photographerData = useSelector(selectPhotographer(userId)).data
-  const photographerStatus = useSelector(selectPhotographer(userId)).status
-  const mediasData = useSelector(selectMedias).data
-  //const navigate = useNavigate()
-  console.log(photographerData, mediasData)
+  const Navigate = useNavigate()
+  const user = useSelector(selectUser)
+  const userStatus = user.status
+  const userId = user.data?.userId
+  const token = user.data?.token
 
-//mettre if dans les useState pour afficher les couleurs déjà sélectionnées
+  useEffect(() => {
+      getOnePhotographer(store, userId, token)
+  }, [store, userId, token])
+
+  const photographer = useSelector(selectPhotographer)
+  const photographerStatus = photographer.status
+  const photographerId = photographer.data?._id
+  //const photographerUserId = photographer.data?.userId
+  const photographerName = photographer.data?.name
+  const photographerCity = photographer.data?.city
+  const photographerCountry = photographer.data?.country
+  const photographerTags = photographer.data?.tags
+  const photographerTagline = photographer.data?.tagline
+  const photographerPrice = photographer.data?.price
+  const photographerPortraitUrl = photographer.data?.portraitUrl
+
   const [name, setName] = useState('')
   const [city, setCity] = useState('')
   const [country, setCountry] = useState('')
+  const [tags, setTags] = useState([])
   const [tagline, setTagline] = useState('')
   const [price, setPrice] = useState('')
-  
-  const [portrait, setPortrait] = useState('')
-  const [portraitChecked, setPortraitChecked] = useState(false)
-  const [artChecked, setArtChecked] = useState(false)
-  const [architectureChecked, setArchitectureChecked] = useState(false)
-  const [animalsChecked, setAnimalsChecked] = useState(false)
-  const [fashionsChecked, setFashionsChecked] = useState(false)
-  const [travelChecked, setTravelChecked] = useState(false)
-  const [sportChecked, setSportChecked] = useState(false)
-  const [eventsChecked, setEventsChecked] = useState(false)
+  const [portraitUrl, setPortraitUrl] = useState('')
 
-  /* useEffect(() => {
-    getOnePhotographer(store, userId, token)
-  }, [store, userId, token]) */
+  const [ edit, setEdit ] = useState(false)
   
-  const createPhotographer = () => {
-    const body = {
-      _id: 'prov',
-      userId,
-      name,
-      city,
-      country,
-      tags:'tags',
-      tagline,
-      price,
-      portrait
+  const portrait = (tags?.indexOf('portrait') >= 0) ? true : false
+  const art = (tags?.indexOf('art') >= 0) ? true : false
+  const architecture = (tags?.indexOf('architecture') >= 0) ? true : false
+  const animals = (tags?.indexOf('animals') >= 0) ? true : false
+  const fashions = (tags?.indexOf('fashions') >= 0) ? true : false
+  const travel = (tags?.indexOf('travel') >= 0) ? true : false
+  const sport = (tags?.indexOf('sport') >= 0) ? true : false
+  const events = (tags?.indexOf('events') >= 0) ? true : false
+
+  const addTag = (e) => {
+    const value = e.target.id.toLowerCase()
+    const newTags = [...tags]
+    switch (value) {
+      case 'portrait':
+        if (portrait) {
+          const index = newTags.indexOf(value)
+          newTags.splice(index, 1)
+        } else {
+          newTags.push(value)
+        }
+        break
+      case 'art':
+        if (art) {
+          const index = newTags.indexOf(value)
+          newTags.splice(index, 1)
+        } else {
+          newTags.push(value)
+        }
+        break
+      case 'fashions':
+        if (fashions) {
+          const index = newTags.indexOf(value)
+          newTags.splice(index, 1)
+        } else {
+          newTags.push(value)
+        }
+        break
+      case 'architecture':
+        if (architecture) {
+          const index = newTags.indexOf(value)
+          newTags.splice(index, 1)
+        } else {
+          newTags.push(value)
+        }
+        break
+      case 'travel':
+        if (travel) {
+          const index = newTags.indexOf(value)
+          newTags.splice(index, 1)
+        } else {
+          newTags.push(value)
+        }
+        break
+      case 'sport':
+        if (sport) {
+          const index = newTags.indexOf(value)
+          newTags.splice(index, 1)
+        } else {
+          newTags.push(value)
+        }
+        break
+      case 'animals':
+        if (animals) {
+          const index = newTags.indexOf(value)
+          newTags.splice(index, 1)
+        } else {
+          newTags.push(value)
+        }
+        break
+      case 'events':
+        if (events) {
+          const index = newTags.indexOf(value)
+          newTags.splice(index, 1)
+        } else {
+          newTags.push(value)
+        }
+        break
+      default:
+        return
     }
-    createOnePhotographer(store, body, token)
+    console.log(newTags)
+    setTags(newTags)
   }
 
-  const modifyPhotographer = () => {
-    modifyOnePhotographer(store, userId)
+  const editing = () => {
+    setEdit(!edit)
+    setName(photographerName)
+    setCity(photographerCity)
+    setCountry(photographerCountry)
+    setTags(photographerTags)
+    setTagline(photographerTagline)
+    setPrice(photographerPrice)
+    setPortraitUrl(photographerPortraitUrl)
+    
+  }
+  
+  const PhotographerBody = {
+    userId,
+    name,
+    city,
+    country,
+    tags:['portrait', 'art'],
+    tagline,
+    price,
+    portraitUrl: ''
+  }
+    
+  const create = () => {
+    const objectData = new FormData()
+    objectData.append('thing', JSON.stringify(PhotographerBody))
+    objectData.append('image', portraitUrl, PhotographerBody.name)
+    createOnePhotographer(store, objectData, token)
+  
   }
 
-  const createMedia = () => {
-
+  const modify = () => {
+    const objectData = new FormData()
+    objectData.append('thing', JSON.stringify(PhotographerBody))
+    objectData.append('image', portraitUrl, PhotographerBody.name)
+    modifyOnePhotographer(store, photographerId, token, objectData)
   }
+  
 
+  if (photographerStatus === 'rejected') {
+    return (<div><h1>Error</h1></div>)
+  }
+  
+  if ( photographerStatus === 'pending' || photographerStatus === 'updating') {
+    return (<div><h1>loading</h1></div>)
+  }
+  
   return (
-    <GeneralWrapper>
-      <ProfileWrapper>
-        <HeaderProfile>
-          <ImageProfile src={DefaultPicture} alt="" />
-          <DivImage>
-            <SpanImage>Edit</SpanImage>
-          </DivImage>
-        </HeaderProfile>
-        <InfoWrapper>
-          <ProfileWrapper>
-            <InputWrapper>
-              <LabelInput htmlFor="name">Name</LabelInput>
-              <InputWrapperLine>
-                <StyledInput
-                  type="text"
-                  id="name"
-                  name="Name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                />
-                <EditButtonWrapper>
-                  <EditButton
-                    src={editIcon}
-                    alt="editButton"
-                    onClick={modifyOnePhotographer}
-                  />
-                </EditButtonWrapper>
-              </InputWrapperLine>
-            </InputWrapper>
-            <InputWrapper>
-              <LabelInput htmlFor="id">City</LabelInput>
-              <InputWrapperLine>
-                <StyledInput
-                  type="text"
-                  id="city"
-                  name="city"
-                  value={city}
-                  onChange={(e) => setCity(e.target.value)}
-                />
-                <EditButtonWrapper>
-                  <EditButton
-                    src={editIcon}
-                    alt="editButton"
-                    onClick={modifyOnePhotographer}
-                  />
-                </EditButtonWrapper>
-              </InputWrapperLine>
-            </InputWrapper>
-            <InputWrapper>
-              <LabelInput htmlFor="id">Country</LabelInput>
-              <InputWrapperLine>
-                <StyledInput
-                  type="text"
-                  id="country"
-                  name="country"
-                  value={country}
-                  onChange={(e) => setCountry(e.target.value)}
-                />
-                <EditButtonWrapper>
-                  <EditButton
-                    src={editIcon}
-                    alt="editButton"
-                    onClick={modifyOnePhotographer}
-                  />
-                </EditButtonWrapper>
-              </InputWrapperLine>
-            </InputWrapper>
-            <InputWrapper>
-              <LabelInput htmlFor="id">Tagline</LabelInput>
-              <InputWrapperLine>
-                <StyledInput
-                  type="text"
-                  id="tagline"
-                  name="tagline"
-                  value={tagline}
-                  onChange={(e) => setTagline(e.target.value)}
-                />
-                <EditButtonWrapper>
-                  <EditButton
-                    src={editIcon}
-                    alt="editButton"
-                    onClick={modifyOnePhotographer}
-                  />
-                </EditButtonWrapper>
-              </InputWrapperLine>
-            </InputWrapper>
-            <InputWrapper>
-              <LabelInput htmlFor="id">Price</LabelInput>
-              <InputWrapperLine>
-                <StyledInput
-                  type="number"
-                  id="price"
-                  name="price"
-                  value={price}
-                  onChange={(e) => setPrice(e.target.value)}
-                />
-                <EditButtonWrapper>
-                  <EditButton
-                    src={editIcon}
-                    alt="editButton"
-                    onClick={modifyOnePhotographer}
-                  />
-                </EditButtonWrapper>
-              </InputWrapperLine>
-            </InputWrapper>
-          </ProfileWrapper>
-          <ProfileWrapper>
-            <RadioButtonWrapper>
-              <div className="btn-option" id="tagPortrait">
-                <span
-                  role="checkbox"
-                  id="Portrait"
-                  aria-labelledby="tagPortrait tag"
-                  className="label__option"
-                  aria-checked={portraitChecked}
-                >
-                  #Portrait
-                </span>
-              </div>
-              <div className="btn-option" id="tagArt">
-                <span
-                  role="checkbox"
-                  id="Art"
-                  aria-labelledby="tagArt tag"
-                  className="label__option"
-                  aria-checked={artChecked}
-                >
-                  #Art
-                </span>
-              </div>
-              <div className="btn-option" id="tagFashions">
-                <span
-                  role="checkbox"
-                  id="Fashions"
-                  aria-labelledby="tagFashions tag"
-                  className="label__option"
-                  aria-checked={fashionsChecked}
-                >
-                  #Fashions
-                </span>
-              </div>
-              <div className="btn-option" id="tagArchitecture">
-                <span
-                  role="checkbox"
-                  id="Architecture"
-                  aria-labelledby="tagArchitecture tag"
-                  className="label__option"
-                  aria-checked={architectureChecked}
-                >
-                  #Architecture
-                </span>
-              </div>
-              <div className="btn-option" id="tagTravel">
-                <span
-                  role="checkbox"
-                  id="Travel"
-                  aria-labelledby="tagTravel tag"
-                  className="label__option"
-                  aria-checked={travelChecked}
-                >
-                  #Travel
-                </span>
-              </div>
-              <div className="btn-option" id="tagSport">
-                <span
-                  role="checkbox"
-                  id="Sport"
-                  aria-labelledby="tagSport tag"
-                  className="label__option"
-                  aria-checked={sportChecked}
-                >
-                  #Sport
-                </span>
-              </div>
-              <div className="btn-option" id="tagAnimals">
-                <span
-                  role="checkbox"
-                  id="Animals"
-                  aria-labelledby="tagAnimals tag"
-                  className="label__option"
-                  aria-checked={animalsChecked}
-                >
-                  #Animals
-                </span>
-              </div>
-              <div className="btn-option" id="tagEvents">
-                <span
-                  role="checkbox"
-                  id="Events"
-                  aria-labelledby="tagEvents tag"
-                  className="label__option"
-                  aria-checked={eventsChecked}
-                >
-                  #Events
-                </span>
-              </div>
-            </RadioButtonWrapper>
-          </ProfileWrapper>
-        </InfoWrapper>
-        <ButtonWrapper>
-          {photographerStatus === 'void' ? (
-            <button className="signup" onClick={createPhotographer}>
-              Create
+    (!edit) ? (
+      <div>
+        <article className="page__photographe--info">
+          <div className="vignet__photographe--info vignet__photographe--label">
+            <VignetTitle>{photographerName}</VignetTitle>
+            <VignetCity>{photographerCity}, {photographerCountry}</VignetCity>
+            <VignetTagline>{photographerTagline}</VignetTagline>
+            {(photographerTags) ?
+            <TagsComponent tags={photographerTags} />
+            :null
+            }
+          </div>
+          <div className ='vignet__photographe--info vignet__photographe--btn'>
+            <button className="btn__contact" value='modify' onClick={editing}>
+              <Icon className='fa fa-edit'/>
             </button>
-          ) : (
-            <button className="signup" onClick={modifyPhotographer}>
-              Modify
-            </button>
-          )}
-        </ButtonWrapper>
-      </ProfileWrapper>
-      <ProfileWrapper>
-        <InfoWrapper></InfoWrapper>
-        <ButtonWrapper>
-          <button className="signup" onClick={createMedia}>
-            Add new media
-          </button>
-        </ButtonWrapper>
-      </ProfileWrapper>
-    </GeneralWrapper>
+          </div>
+          <div className="vignet__photographe--info vignet__photographe--photo">
+            <VignetPhoto src={photographerPortraitUrl} alt={photographerName} style={{ width: "200px", height: '200px' }} />
+          </div>
+        </article>
+        <article className="tri__medias">
+
+        </article>
+        <article className="plage__media">
+
+        </article>
+        <div>
+          
+        </div>
+      </div>
+    ) : (
+        <div>
+        <article className="page__photographe--info">
+          <div className="vignet__photographe--info vignet__photographe--label">
+            <InputWrapper>
+              <StyledInputTitle
+                type="text"
+                id="name"
+                name="name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+            </InputWrapper>
+              <InputWrapper>
+            <StyledInputCity
+              type="text"
+              id="city"
+              name="city"
+              value={city}
+              onChange={(e) => setCity(e.target.value)}
+            />, 
+            <StyledInputCity
+              type="text"
+              id="country"
+              name="country"
+              value={country}
+              onChange={(e) => setCountry(e.target.value)}
+            />
+              </InputWrapper>
+              <InputWrapper>
+            <StyledInputTagline
+              type="text"
+              id="tagline"
+              name="tagline"
+              value={tagline}
+              onChange={(e) => setTagline(e.target.value)}
+            />
+              </InputWrapper>
+              <InputWrapper>
+            <StyledInputTagline
+              type="number"
+              id="price"
+              name="price"
+              value={price}
+              onChange={(e) => setPrice(e.target.value)}
+            />
+          </InputWrapper>
+            {(photographerTags) ?
+            <TagsComponent tags={photographerTags} />
+            :null
+            }
+          </div>
+            <div className='vignet__photographe--info vignet__photographe--btn'>
+              {(photographerId) ? (
+                <button className="btn__contact" value='modify' onClick={modify}>
+                  <Icon className='fa fa-edit'/>
+                </button>
+              ) : (
+                <button className="btn__contact" value='modify' onClick={create}>
+                  <Icon className='fa fa-plus'/>
+                </button>
+              )}
+          </div>
+          <div className="vignet__photographe--info vignet__photographe--photo">
+              <VignetPhoto src={photographerPortraitUrl} alt={photographerName} style={{ width: "200px", height: '200px' }} />
+              <StyledInput
+              type="file"
+              id="portraitUrl"
+              name="portraitUrl"
+              accept='image/png, image/jpeg, image/jpg, video/mpeg, video/mp4'
+              onChange={(e) => setPortraitUrl(e.target.files[0])}/>
+          </div>
+        </article>
+        <article className="tri__medias">
+
+        </article>
+        <article className="plage__media">
+
+        </article>
+        <div>
+          
+        </div>
+      <CreateWrapper>
+        <FormWrapper>
+          <InputWrapper>
+            <StyledInput
+              type="text"
+              id="tags"
+              name="tags"
+              placeholder='tags'
+              value={tags}
+              onChange={(e) => setTags(e.target.value)}
+            />
+          </InputWrapper>
+        </FormWrapper>
+      </CreateWrapper>
+      </div>
+    )
   )
 }
-
-export default Profile
