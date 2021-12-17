@@ -17,7 +17,7 @@ exports.createPhotographer = (req, res, next) => {
   delete thingObject._id;
   const photographer = new Photographer({
     ...thingObject,
-    portrait: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+    portraitUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
   })
   photographer.save()
     .then(() => res.status(201).json({ message: 'Photographer OK' }))
@@ -39,7 +39,7 @@ exports.getAllPhotographer = (req, res, next) => {
 exports.modifyOnePhotographer = (req, res, next) => {
   const photographerObject = req.file ? {
     ...JSON.parse(req.body.thing),
-    portrait: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+    portraitUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
   } : { ...req.body }
   Photographer.updateOne({ _id: req.params.id },{...photographerObject, _id:req.params.id})
     .then(() => {
