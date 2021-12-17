@@ -1,9 +1,6 @@
 export const selectUser = (state) => state.user
 
-export const selectPhotographer = (photographerId) => (state) => {
-  return state.photographer[photographerId] ?? { status: 'void' }
-}
-
+export const selectPhotographer = (state) => state.photographer
 
 export const selectPhotographers = (state) => state.photographers
 

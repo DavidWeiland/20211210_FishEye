@@ -48,12 +48,12 @@ const { actions, reducer } = createSlice({
   },
 })
 
-export async function getOnePhotographer(store, photographerId, token) {
+export async function getOnePhotographer(store, userId, token) {
   const status = selectPhotographer(store.getState()).status
   const axiosBody = {
     method: 'get',
-    url: `http://localhost:3001/api/photographer/:${photographerId}`,
-    authorization: `BEARER ${token}`,
+    url: `http://localhost:3001/api/photographer/private/${userId}`,
+    headers:{'authorization': `Bearer ${token}`}
   }
   if (status === 'pending' || status === 'updating') {
     return
@@ -61,7 +61,7 @@ export async function getOnePhotographer(store, photographerId, token) {
   store.dispatch(actions.fetching())
   try {
     const response = await axios(axiosBody)
-    const data = await response.json()
+    const data = await response.data
     store.dispatch(actions.resolved(data))
   } catch (error) {
     store.dispatch(actions.rejected(error))
@@ -72,7 +72,7 @@ export async function createOnePhotographer(store, body, token) {
   const status = selectPhotographer(store.getState()).status
   const axiosBody = {
     method: 'post',
-    url: `http://localhost:3001/api/photographer`,
+    url: `http://localhost:3001/api/photographer/private`,
     data: body,
     headers: { 'authorization': `Bearer ${token}` },
   }
@@ -89,11 +89,13 @@ export async function createOnePhotographer(store, body, token) {
   }
 }
 
-export async function modifyOnePhotographer(store, photographerId) {
+export async function modifyOnePhotographer(store, photographerId, token, PhotographerBody) {
   const status = selectPhotographer(store.getState()).status
   const axiosBody = {
-    method: 'post',
-    url: `http://localhost:3001/api/photographer/:${photographerId}`,
+    method: 'put',
+    url: `http://localhost:3001/api/photographer/private/${photographerId}`,
+    headers: { authorization: `Bearer ${token}` },
+    data: PhotographerBody
   }
   if (status === 'pending' || status === 'updating') {
     return
@@ -101,8 +103,8 @@ export async function modifyOnePhotographer(store, photographerId) {
   store.dispatch(actions.fetching())
   try {
     const response = await axios(axiosBody)
-    const data = await response.json()
-    store.dispatch(actions.resolved(data))
+    const resData = await response.data.body
+    store.dispatch(actions.resolved(resData))
   } catch (error) {
     store.dispatch(actions.rejected(error))
   }

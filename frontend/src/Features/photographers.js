@@ -50,13 +50,17 @@ const { actions, reducer } = createSlice({
 
 export async function getAllPhotographers(store) {
   const status = selectPhotographers(store.getState()).status
+  const axiosBody = {
+    method: 'get',
+    url: `http://localhost:3001/api/photographer`,
+  }
   if (status === 'pending' || status === 'updating') {
     return
   }
   store.dispatch(actions.fetching())
   try {
-    const response = await axios({method:'get', url:'http://localhost:3001/api/photographer'})
-    const data = await response.json()
+    const response = await axios(axiosBody)
+    const data = await response.data
     store.dispatch(actions.resolved(data))
   } catch (error) {
     store.dispatch(actions.rejected(error))
