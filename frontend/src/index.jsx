@@ -2,6 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 
+import './Utils/Styles/style.css'
+import Header from './Components/Header';
 import Home from './Pages/Home';
 import LoginPage from './Pages/Login';
 import Profile from './Pages/Profile';
@@ -13,6 +15,7 @@ ReactDOM.render(
   <Provider store={store}>
     <React.StrictMode>
       <Router>
+        <Header />
         <Routes>
           <Route exact path="/" element={<Home />} />
           <Route path="login" element ={<LoginPage />} />
