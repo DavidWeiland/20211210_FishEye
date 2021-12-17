@@ -36,13 +36,13 @@ const LabelOption=styled.span`
     text-align: center;
     cursor:pointer;
 `
-export default function TagsComponent({tags}) {
+export default function TagsComponent({tags, selectTag}) {
   return (
     <VignetForm>
       {tags.map((tag, index) => ( 
         <BtnOption
           key = {`${index}-${tag}`} tag={tag}>
-          <LabelOption>
+          <LabelOption onClick={selectTag}>
             {`#${tag}`}
           </LabelOption>
         </BtnOption>
