@@ -1,10 +1,9 @@
 const mongoose = require('mongoose')
 
 const mediaSchema = mongoose.Schema({
-  photographerId: { type: Number, required: true },
+  userId: { type: String, required: true },
   title: { type: String, required: true },
-  image: { type: String },
-  video: { type: String },
+  mediaUrl: { type: String, required: true },
   tags: { type: Array, required: true },
   likes: { type: Number, required: true },
   date: { type: String, required: true },

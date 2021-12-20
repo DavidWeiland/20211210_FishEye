@@ -6,7 +6,7 @@ exports.createMedia = (req, res, next) => {
   delete mediaObject._id
   const media = new Media({
     ...mediaObject,
-    imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+    mediaUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
   })
   media.save()
     .then(() => res.status(201).json({message : 'Media created !' }))
@@ -14,7 +14,7 @@ exports.createMedia = (req, res, next) => {
 }
 
 exports.getAllMediaOfOnePhotographer = (req, res, next) => {
-  Media.find({ photographerId: req.params.photographerId })
+  Media.find({ userId: req.params.userId })
     .then(medias => res.status(200).json(medias))
     .catch(error => res.status(400).json({ error }))
 }
@@ -27,7 +27,7 @@ exports.getOneMedia = (req, res, next) => {
 exports.modifyOneMedia = (req, res, next) => {
   const mediaObject = req.file ? {
     ...JSON.parse(req.body.thing),
-    imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+    mediaUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
   } : { ...req.body }
   Media.updateOne({ _id: req.params.id },{...mediaObject, _id:req.params.id})
   .then(() => res.status(200).json({message:'Media modified !'}))
@@ -47,7 +47,7 @@ exports.deleteOneMedia = (req, res, next) => {
           error: new Error('request non authorized')
         })
       }
-      const filename = thing.imageUrl.split('/images/')[1]
+      const filename = thing.mediaUrl.split('/images/')[1]
       fs.unlink(`images/${filename}`, () => {
         Media.deleteOne({ _id: req.params.id })
           .then(() => res.status(200).json({message: 'Media deleted !'}))
@@ -55,5 +55,4 @@ exports.deleteOneMedia = (req, res, next) => {
       })
     })
     .catch(error => res.status(500).json({ error }))
-  
 }
