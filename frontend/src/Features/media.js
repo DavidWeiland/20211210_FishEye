@@ -49,12 +49,17 @@ const { actions, reducer } = createSlice({
 })
 
 //exemple pour éviter warning
-export async function login(store, body) {
+export async function createOneMedia(store, thing, image, token) {
   const status = selectMedia(store.getState()).status
+  const body = new FormData()
+  body.append('thing', JSON.stringify(thing))
+  body.append('image', image, thing.name)
+  
   const axiosBody = {
     method: 'post',
-    url: `http://localhost:3001/api/auth/login`,
+    url: `http://localhost:3001/api/media/private`,
     data: body,
+    headers: { 'authorization': `Bearer ${token}` },
   }
   if (status === 'pending' || status === 'updating') {
     return
@@ -62,7 +67,7 @@ export async function login(store, body) {
   store.dispatch(actions.fetching())
   try {
     const response = await axios(axiosBody)
-    const data = await response.data.body
+    const data = await response.data
     store.dispatch(actions.resolved(data))
   } catch (error) {
     store.dispatch(actions.rejected(error))

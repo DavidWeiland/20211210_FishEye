@@ -48,13 +48,11 @@ const { actions, reducer } = createSlice({
   },
 })
 
-//exemple pour éviter warning
-export async function login(store, body) {
+export async function getAllMediasOfOnePhotographer(store, userId) {
   const status = selectMedias(store.getState()).status
   const axiosBody = {
-    method: 'post',
-    url: `http://localhost:3001/api/auth/login`,
-    data: body,
+    method: 'get',
+    url: `http://localhost:3001/api/media/${userId}`,
   }
   if (status === 'pending' || status === 'updating') {
     return
@@ -62,7 +60,7 @@ export async function login(store, body) {
   store.dispatch(actions.fetching())
   try {
     const response = await axios(axiosBody)
-    const data = await response.data.body
+    const data = await response.data
     store.dispatch(actions.resolved(data))
   } catch (error) {
     store.dispatch(actions.rejected(error))
