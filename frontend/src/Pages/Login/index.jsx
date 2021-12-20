@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { signup, login } from '../../Features/user'
+import { login } from '../../Features/user'
 import { useStore, useSelector } from 'react-redux'
 import { selectUser } from '../../Utils/selectors'
 import styled from 'styled-components'
@@ -82,24 +82,22 @@ function LoginPage() {
 
   const userStatus = useSelector(selectUser).status
   const userId = useSelector(selectUser).data?.userId
-  
+
   const body = { email, password }
   
   function connect() {
+    if (email === '' || password === '') {
+      create()
+    }
     login(store, body)
   }
 
   function create() {
-    signup(store, body)
+    navigate('/new_photographer')
   }
 
-  if (userStatus === 'resolved') {
-    if (userId) {
+  if (userStatus === 'resolved' && userId) {
       navigate('/profile')
-    } else {
-      login(store, body)
-      navigate('/new_photographer')
-    }
   }
 
   return (
@@ -129,9 +127,6 @@ function LoginPage() {
       <ButtonWrapper>
       <StyledButton className="signup" onClick={connect}>
         <Icon className='fa fa-check'/>
-      </StyledButton>
-      <StyledButton className="signup" onClick={create}>
-        <Icon className='fa fa-user-plus'/>
       </StyledButton>
       </ButtonWrapper>
     </LoginWrapper>

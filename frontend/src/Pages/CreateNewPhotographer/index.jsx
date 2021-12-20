@@ -1,13 +1,16 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { createOnePhotographer} from '../../Features/photographer'
 import { useStore, useSelector } from 'react-redux'
 import { selectUser, selectPhotographer } from '../../Utils/selectors'
 import styled from 'styled-components'
 import '../../Utils/Styles/style.css'
 import { Navigate } from 'react-router-dom'
-import { login } from '../../Features/user'
+import { login, signup } from '../../Features/user'
 
-
+const Article = styled.article`
+margin-bottom:20px;
+border-radius:5px 5px 5px 5px;
+`
 const VignetPhoto = styled.img`
   width: 200px;
   height: 200px;
@@ -80,25 +83,86 @@ const CreateStyledInput = styled.input`
     background-color:rgba(0, 0, 0, 0.2);
     };
 `
+const LoginWrapper = styled.div`
+  margin:auto;
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-direction:column;
+  justify-content:space-between;
+  align-items:center
+`
+const FormWrapper = styled.div`
+  height: auto;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+`
+const ButtonWrapper = styled.div`
+  margin: auto;
+  height: auto;
+  width: 33%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+`
+const InputWrapper = styled.div`
+  width: 63%;
+  display: flex;
+  flex-direction: column;
+  justify-content:center;
+`
+const ArticleTitle = styled.h1`
+  margin:auto;
+  width:100%;
+  font-size: 15px;
+  color:#901C1C;
+  display:flex;
+`
+
+const StyledButton = styled.button`
+  background-color:#901C1C;
+  width:70px;
+  height:70px;
+  border-radius:100%;
+  border: 0;
+  box-shadow:0px 4px 12px rgba(0, 0, 0, 0.25);
+  box-shadow:inset -2px -4px 12px rgba(0, 0, 0, 0.5), inset 2px 4px 12px rgba(255, 255, 255, 0.5);
+`
+const Icon = styled.i`
+ color:rgba(255, 255, 255, 1);
+ font-size:35px;
+`
 
 
 export default function CreatePhotographer() {
   const store = useStore()
+  const [ email, setEmail ] = useState('')
+  const [ password, setPassword ] = useState('')
   /* const navigate = useNavigate() */
   const user = useSelector(selectUser)
   const userStatus = user.status
   const userId = user.data?.userId
   const token = user.data?.token
-  const email = user.data?.email
-  const password = user.data?.password
+  //const email = user.data?.email
+  //const password = user.data?.password
 
   const photographerStatus = useSelector(selectPhotographer).status
 
-  useEffect(() => {
-    const body = {email, password}
-    login(store, body)
-  }, [store, email, password])
+  const body = {email, password}
 
+  const logeur = () => setTimeout(()=>
+  login(store, body),
+  1000
+  )
+
+  function signIn() {
+    signup(store, body)
+    logeur()
+  }
+  
   const [name, setName] = useState('')
   const [city, setCity] = useState('')
   const [country, setCountry] = useState('')
@@ -219,11 +283,6 @@ export default function CreatePhotographer() {
     createOnePhotographer(store, PhotographerBody, portraitUrl, token)
   }
   
-
-  if (userStatus === 'rejected') {
-    return (<div><h1>Error</h1></div>)
-  }
-  
   if ( userStatus === 'pending' || userStatus === 'updating') {
     return (<div><h1>loading</h1></div>)
   }
@@ -231,11 +290,45 @@ export default function CreatePhotographer() {
   if ( photographerStatus === 'resolved') {
     return <Navigate to='/profile'/>
   }
-
   
   return (
-      <div>
-        <article className="page__photographe--info">
+    <div>
+      <Article className="page__photographe--info">
+        <LoginWrapper>
+          <ArticleTitle>Mes identifiants de connection :</ArticleTitle>
+          <FormWrapper>
+            <InputWrapper>
+              <CreateStyledInputCity
+                type="text"
+                id="email"
+                name="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder='Email'
+              />
+              <CreateStyledInputCity
+                type="password"
+                id="password"
+                name="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder='password'
+              />
+            </InputWrapper>
+            <ButtonWrapper>
+              <StyledButton className="signup" onClick={signIn}>
+                <Icon className='fa fa-user-plus'/>
+              </StyledButton>
+            </ButtonWrapper>
+          </FormWrapper>
+        </LoginWrapper>
+      </Article>
+      <Article className="page__photographe--info">
+        <LoginWrapper>
+          <ArticleTitle>Mon profile :</ArticleTitle>
+          <FormWrapper>
+
+          
           <div className="vignet__photographe--info vignet__photographe--label">
             <CreateInputWrapper>
               <CreateStyledInputTitle
@@ -243,7 +336,8 @@ export default function CreatePhotographer() {
                 id="name"
                 name="name"
                 value={name}
-                onChange={(e) => setName(e.target.value)}
+              onChange={(e) => setName(e.target.value)}
+              placeholder='Name'
               />
             </CreateInputWrapper>
               <CreateInputWrapper>
@@ -253,6 +347,7 @@ export default function CreatePhotographer() {
               name="city"
               value={city}
               onChange={(e) => setCity(e.target.value)}
+              placeholder='City'
             />, 
             <CreateStyledInputCity
               type="text"
@@ -260,6 +355,7 @@ export default function CreatePhotographer() {
               name="country"
               value={country}
               onChange={(e) => setCountry(e.target.value)}
+              placeholder='Country'
             />
               </CreateInputWrapper>
               <CreateInputWrapper>
@@ -269,6 +365,7 @@ export default function CreatePhotographer() {
               name="tagline"
               value={tagline}
               onChange={(e) => setTagline(e.target.value)}
+              placeholder='Tagline'
             />
               </CreateInputWrapper>
               <CreateInputWrapper>
@@ -278,6 +375,7 @@ export default function CreatePhotographer() {
               name="price"
               value={price}
               onChange={(e) => setPrice(e.target.value)}
+              placeholder='price'
             />
           </CreateInputWrapper>
           <form aria-label="tag" id="tag" className="form__option">
@@ -322,8 +420,10 @@ export default function CreatePhotographer() {
               name="portraitUrl"
               accept='image/png, image/jpeg, image/jpg'
               onChange={(e) => portraitReader(e)}/>
-          </div>
-        </article>
+            </div>
+          </FormWrapper>
+        </LoginWrapper>
+      </Article>
     </div>
   )
 }

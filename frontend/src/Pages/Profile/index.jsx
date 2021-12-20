@@ -1,11 +1,13 @@
 import { useEffect } from 'react'
 import { getOnePhotographer } from '../../Features/photographer'
+import {getAllMediasOfOnePhotographer } from '../../Features/medias'
 import { useStore, useSelector } from 'react-redux'
-import { selectUser, selectPhotographer } from '../../Utils/selectors'
+import { selectUser, selectPhotographer, selectMedias, selectMedia } from '../../Utils/selectors'
 import styled from 'styled-components'
 import '../../Utils/Styles/style.css'
 import TagsComponent from '../../Components/TagsComponent'
 import { Navigate, useNavigate } from 'react-router'
+import CardMedia from '../../Components/CardMedia'
 
 const VignetTitle = styled.h1`
   font-size: 36px;
@@ -39,15 +41,17 @@ export default function Profile() {
   const store = useStore()
   const navigate = useNavigate()
   
-
   const user = useSelector(selectUser)
   const userStatus = user.status
   const userId = user.data?.userId
   const token = user.data?.token
-
+  const mediaStatus = useSelector(selectMedia).status
+  
   useEffect(() => {
-      getOnePhotographer(store, userId, token)
-  }, [store, userId, token])
+    getOnePhotographer(store, userId, token)
+    getAllMediasOfOnePhotographer(store,userId)
+  }, [ store, userId, token, mediaStatus ])
+  const mediasData = useSelector(selectMedias).data
 
   const photographer = useSelector(selectPhotographer)
   //const photographerStatus = photographer.status
@@ -61,12 +65,12 @@ export default function Profile() {
   //const photographerPrice = photographer.data?.price
   const photographerPortraitUrl = photographer.data?.portraitUrl
 
-  
+
   if (userStatus === 'rejected') {
     return <Navigate to='/login'/>
   }
   
-  if ( userStatus === 'pending' || userStatus === 'updating') {
+  if ( userStatus === 'pending' || userStatus === 'updating' || mediaStatus === 'pending' || mediaStatus === 'updating') {
     return (<div><h1>loading</h1></div>)
   }
 
@@ -74,6 +78,10 @@ export default function Profile() {
     navigate('/modify_photographer')
   }
   
+  const addAMedia = () => {
+    navigate('/new_media')
+  }
+
   return (
       <div>
         <article className="page__photographe--info">
@@ -92,13 +100,29 @@ export default function Profile() {
             </button>
           </div>
           <div className="vignet__photographe--info vignet__photographe--photo">
-            <VignetPhoto src={photographerPortraitUrl} alt={photographerName} style={{ width: "200px", height: '200px' }} />
+            <VignetPhoto src={photographerPortraitUrl} alt={photographerName} />
           </div>
         </article>
         <article className="tri__medias">
 
         </article>
         <article className="plage__media">
+        <div className='medias'>
+          <div className='mediasInside mediasInside-plus' onClick={addAMedia}>
+            <i className='fa fa-plus'/>
+          </div>
+          {mediasData?.map(({ index, title, likes, mediaUrl }) => (
+              <CardMedia
+                key={`${title}-${index}`}
+                title={title}
+                likes={likes}
+                mediaUrl={mediaUrl}
+              />
+          ))}
+          
+          </div>
+            
+      
 
         </article>
         <div>
