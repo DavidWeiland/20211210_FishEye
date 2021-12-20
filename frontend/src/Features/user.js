@@ -45,6 +45,15 @@ const { actions, reducer } = createSlice({
       }
       return
     },
+    reset: (draft, action) => {
+      if (draft.status === 'pending' || draft.status === 'updating') {
+        draft.status = 'void'
+        draft.error = null
+        draft.data = null
+        return
+      }
+      return
+    },
   },
 })
 
@@ -86,6 +95,15 @@ export async function login(store, body) {
   } catch (error) {
     store.dispatch(actions.rejected(error))
   }
+}
+
+export async function resetUser(store) {
+  const status = selectUser(store.getState()).status
+  if (status === 'pending' || status === 'updating') {
+    return
+  }
+  store.dispatch(actions.fetching())
+  store.dispatch(actions.reset())
 }
 
 export const { resolved } = actions

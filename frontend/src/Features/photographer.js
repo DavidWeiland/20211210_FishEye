@@ -45,6 +45,15 @@ const { actions, reducer } = createSlice({
       }
       return
     },
+    reset: (draft, action) => {
+      if (draft.status === 'pending' || draft.status === 'updating') {
+        draft.status = 'void'
+        draft.error = null
+        draft.data = null
+        return
+      }
+      return
+    },
   },
 })
 
@@ -121,6 +130,15 @@ export async function modifyOnePhotographer(store, photographerId, token, image,
   } catch (error) {
     store.dispatch(actions.rejected(error))
   }
+}
+
+export async function resetPhotographer(store) {
+  const status = selectPhotographer(store.getState()).status
+  if (status === 'pending' || status === 'updating') {
+    return
+  }
+  store.dispatch(actions.fetching())
+  store.dispatch(actions.reset())
 }
 
 export default reducer
