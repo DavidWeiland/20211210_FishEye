@@ -1,21 +1,39 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
-import { selectUser } from '../../Utils/selectors'
+import { useSelector, useStore } from 'react-redux'
+import { selectPhotographer, selectUser } from '../../Utils/selectors'
 import logo from '../../Assets/Images/logo.svg'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
+import { resetUser } from '../../Features/user'
+import { resetPhotographer } from '../../Features/photographer'
 
 const StyledBanner = styled.div`
-    position:relative;
-    top:0;
+    width: 100%;
+    height: 130px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+`
+const StyledDivConnect = styled.div`
+    width: 100%;
+    height: 30px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    align-items: center;
+    z-index:20;
+`
+const StyledDivLogo = styled.div`
     width: 100%;
     height: 100px;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
-    z-index:1;
 `
 
 const StyledLogo = styled.img`
@@ -27,30 +45,44 @@ const StyledLogo = styled.img`
 `
 
 const IconBanner = styled.i`
-    font-size: 30px;
+    margin:15px;
+    font-size: 25px;
     color:#901C1C;
     cursor: pointer;
-    z-index:10;
 `
 
 export default function Header() {
+  const store = useStore()
+  const navigate = useNavigate()
 
   const userId = useSelector(selectUser).data?.userId
+  const name = useSelector(selectPhotographer).data?.name || 'Se connecter'
+
+  const reseting = () => {
+    resetPhotographer(store)
+    resetUser(store)
+    navigate('/')
+  }
 
   return (
     <StyledBanner>
-      <Link to='/' id='logo'>
-        <StyledLogo src={logo} alt='logo-fisheye'/>
-      </Link>
-      {(userId) ? (
-        <Link to='/'>
-          <IconBanner className='fa fa-sign-out'/>
+      <StyledDivConnect>
+          <span>{name}</span>
+        {(userId) ? (
+          <div onClick={reseting}>
+            <IconBanner className='fa fa-sign-out'/>
+          </div>
+        ) : (
+          <Link to='/login'>
+            <IconBanner className='fa fa-user-circle'/>
+          </Link>
+        )}
+      </StyledDivConnect>
+      <StyledDivLogo>
+        <Link to='/' id='logo'>
+          <StyledLogo src={logo} alt='logo-fisheye'/>
         </Link>
-      ) : (
-        <Link to='/login'>
-          <IconBanner className='fa fa-user-circle'/>
-        </Link>
-      )}
+      </StyledDivLogo>
     </StyledBanner>
   )
 }
