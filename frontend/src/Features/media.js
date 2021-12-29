@@ -48,18 +48,68 @@ const { actions, reducer } = createSlice({
   },
 })
 
-//exemple pour éviter warning
+
 export async function createOneMedia(store, thing, image, token) {
   const status = selectMedia(store.getState()).status
   const body = new FormData()
   body.append('thing', JSON.stringify(thing))
-  body.append('image', image, thing.name)
+  body.append('image', image, thing.title)
   
   const axiosBody = {
     method: 'post',
     url: `http://localhost:3001/api/media/private`,
-    data: body,
-    headers: { 'authorization': `Bearer ${token}` },
+    headers: { authorization: `Bearer ${token}` },
+    data: body
+  }
+  if (status === 'pending' || status === 'updating') {
+    return
+  }
+  store.dispatch(actions.fetching())
+  try {
+    const response = await axios(axiosBody)
+    const data = await response.data
+    store.dispatch(actions.resolved(data))
+  } catch (error) {
+    store.dispatch(actions.rejected(error))
+  }
+}
+
+export async function getOneMedia(store, id, token) {
+  const status = selectMedia(store.getState()).status
+  const axiosBody = {
+    method: 'get',
+    url: `http://localhost:3001/api/media/private/${id}`,
+    headers:{authorization: `Bearer ${token}`}
+  }
+  if (status === 'pending' || status === 'updating') {
+    return
+  }
+  store.dispatch(actions.fetching())
+  try {
+    const response = await axios(axiosBody)
+    const data = await response.data
+    store.dispatch(actions.resolved(data))
+  } catch (error) {
+    store.dispatch(actions.rejected(error))
+  }
+}
+
+export async function modifyOneMedia(store, mediaId, token, image, thing) {
+  const status = selectMedia(store.getState()).status
+  let body
+  if (typeof image === 'string') {
+    thing.mediaUrl = image
+    body = thing
+  } else {
+    body = new FormData()
+    body.append('thing', JSON.stringify(thing))
+    body.append('image', image, thing.title)
+  }
+  const axiosBody = {
+    method: 'put',
+    url: `http://localhost:3001/api/media/private/${mediaId}`,
+    headers: { authorization: `Bearer ${token}` },
+    data: body
   }
   if (status === 'pending' || status === 'updating') {
     return
