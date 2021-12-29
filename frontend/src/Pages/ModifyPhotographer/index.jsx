@@ -4,7 +4,7 @@ import { useStore, useSelector } from 'react-redux'
 import { selectUser, selectPhotographer } from '../../Utils/selectors'
 import styled from 'styled-components'
 import '../../Utils/Styles/style.css'
-import { useNavigate } from 'react-router'
+//import { useNavigate } from 'react-router'
 
 
 const VignetPhoto = styled.img`
@@ -80,12 +80,10 @@ const StyledInput = styled.input`
     };
 `
 
-export default function Profile() {
+export default function Profile({state, close}) {
   const store = useStore()
-  const navigate = useNavigate()
+  //const navigate = useNavigate()
   const user = useSelector(selectUser)
-  //const userStatus = user.status
-  //const userId = user.data?.userId
   const token = user.data?.token
 
   const photographer = useSelector(selectPhotographer)
@@ -208,7 +206,7 @@ export default function Profile() {
   }
 
   const modify = () => {
-    const PhotographerBody = {
+    const body = {
     userId:photographerUserId,
     name,
     city,
@@ -218,8 +216,9 @@ export default function Profile() {
     price,
     portraitUrl:''
     }
-    modifyOnePhotographer(store, photographerId, token, portraitUrl, PhotographerBody)
-    navigate('/profile')
+    modifyOnePhotographer(store, photographerId, token, portraitUrl, body)
+    //navigate('/profile')
+    close()
   }
 
   if (photographerStatus === 'rejected') {

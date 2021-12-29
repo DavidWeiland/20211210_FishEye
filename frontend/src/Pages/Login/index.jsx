@@ -97,7 +97,7 @@ function LoginPage() {
   }
 
   if (userStatus === 'resolved' && userId) {
-      navigate('/profile')
+      navigate(`/profile/${userId}`)
   }
 
   return (

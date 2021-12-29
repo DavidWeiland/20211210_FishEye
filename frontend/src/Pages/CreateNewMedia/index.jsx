@@ -106,7 +106,7 @@ const ArticleTitle = styled.h1`
   display:flex;
 `
 
-export default function CreatePhotographer() {
+export default function CreateMedia() {
   const store = useStore()
   const navigate = useNavigate()
   
@@ -231,7 +231,7 @@ export default function CreatePhotographer() {
       price
     }
     createOneMedia(store, MediaBody, mediaUrl, token)
-    navigate('/profile')
+    navigate(`/profile/${userId}`)
   }
   
   if ( userStatus === 'pending' || userStatus === 'updating') {

@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { getOnePhotographer } from '../../Features/photographer'
 import {getAllMediasOfOnePhotographer } from '../../Features/medias'
 import { useStore, useSelector } from 'react-redux'
@@ -6,8 +6,9 @@ import { selectUser, selectPhotographer, selectMedias, selectMedia } from '../..
 import styled from 'styled-components'
 import '../../Utils/Styles/style.css'
 import TagsComponent from '../../Components/TagsComponent'
-import { Navigate, useNavigate } from 'react-router'
+import { Navigate, useNavigate, useParams } from 'react-router'
 import CardMedia from '../../Components/CardMedia'
+import ModifyPhotographer from '../ModifyPhotographer'
 
 const VignetTitle = styled.h1`
   font-size: 36px;
@@ -40,13 +41,15 @@ const VignetPhoto = styled.img`
 export default function Profile() {
   const store = useStore()
   const navigate = useNavigate()
+  const {userId} = useParams()
+  const [edit, setEdit] = useState(false)
   
   const user = useSelector(selectUser)
   const userStatus = user.status
-  const userId = user.data?.userId
+  //const userId = user.data?.userId
   const token = user.data?.token
   const mediaStatus = useSelector(selectMedia).status
-  
+
   useEffect(() => {
     getOnePhotographer(store, userId, token)
     getAllMediasOfOnePhotographer(store,userId)
@@ -54,55 +57,60 @@ export default function Profile() {
   const mediasData = useSelector(selectMedias).data
 
   const photographer = useSelector(selectPhotographer)
-  //const photographerStatus = photographer.status
-  //const photographerId = photographer.data?._id
-  //const photographerUserId = photographer.data?.userId
-  const photographerName = photographer.data?.name
-  const photographerCity = photographer.data?.city
-  const photographerCountry = photographer.data?.country
-  const photographerTags = photographer.data?.tags
-  const photographerTagline = photographer.data?.tagline
-  //const photographerPrice = photographer.data?.price
-  const photographerPortraitUrl = photographer.data?.portraitUrl
 
+  if ( photographer.data?.message === 'Photographer modified !') {
+    getOnePhotographer(store, userId, token)
+  }
+
+  let Photographer = {
+    name: photographer.data?.name,
+    city: photographer.data?.city,
+    country:photographer.data?.country,
+    tags : photographer.data?.tags,
+    tagline : photographer.data?.tagline,
+    price : photographer.data?.price,
+    portraitUrl : photographer.data?.portraitUrl
+  }
 
   if (userStatus === 'rejected') {
     return <Navigate to='/login'/>
   }
   
-  if ( userStatus === 'pending' || userStatus === 'updating' || mediaStatus === 'pending' || mediaStatus === 'updating') {
+  if ( userStatus === 'pending' || userStatus === 'updating' || photographer.status === 'pending' || photographer.status === 'updating' || mediaStatus === 'pending' || mediaStatus === 'updating') {
     return (<div><h1>loading</h1></div>)
   }
 
-  const goTo = () => {
-    navigate('/modify_photographer')
+  const Edit = () => {
+    setEdit(!edit)
   }
-  
+
   const addAMedia = () => {
     navigate('/new_media')
   }
 
   return (
-      <div>
+    <div>
+      {(!edit) ? (
         <article className="page__photographe--info">
           <div className="vignet__photographe--info vignet__photographe--label">
-            <VignetTitle>{photographerName}</VignetTitle>
-            <VignetCity>{photographerCity}, {photographerCountry}</VignetCity>
-            <VignetTagline>{photographerTagline}</VignetTagline>
-            {(photographerTags) ?
-            <TagsComponent tags={photographerTags} />
+            <VignetTitle>{Photographer.name}</VignetTitle>
+            <VignetCity>{Photographer.city}, {Photographer.country}</VignetCity>
+            <VignetTagline>{Photographer.tagline}</VignetTagline>
+            {(Photographer.tags) ?
+            <TagsComponent tags={Photographer.tags} />
             :null
             }
           </div>
           <div className ='vignet__photographe--info vignet__photographe--btn'>
-            <button className="btn__contact" value='modify' onClick={goTo}>
+            <button className="btn__contact" value='modify' onClick={Edit}>
               Profile Editor
             </button>
           </div>
           <div className="vignet__photographe--info vignet__photographe--photo">
-            <VignetPhoto src={photographerPortraitUrl} alt={photographerName} />
+            <VignetPhoto src={Photographer.portraitUrl} alt={Photographer.name} />
           </div>
-        </article>
+        </article>):(
+          <ModifyPhotographer state={edit} close={Edit}/>)}
         <article className="tri__medias">
 
         </article>
@@ -111,12 +119,13 @@ export default function Profile() {
           <div className='mediasInside mediasInside-plus' onClick={addAMedia}>
             <i className='fa fa-plus'/>
           </div>
-          {mediasData?.map(({ index, title, likes, mediaUrl }) => (
+          {mediasData?.map(({ index, title, likes, mediaUrl, _id }) => (
               <CardMedia
                 key={`${title}-${index}`}
                 title={title}
                 likes={likes}
                 mediaUrl={mediaUrl}
+                mediaId={_id}
               />
           ))}
           

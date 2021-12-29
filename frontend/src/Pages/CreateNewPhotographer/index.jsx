@@ -136,18 +136,14 @@ const Icon = styled.i`
  font-size:35px;
 `
 
-
 export default function CreatePhotographer() {
   const store = useStore()
   const [ email, setEmail ] = useState('')
   const [ password, setPassword ] = useState('')
-  /* const navigate = useNavigate() */
   const user = useSelector(selectUser)
   const userStatus = user.status
   const userId = user.data?.userId
   const token = user.data?.token
-  //const email = user.data?.email
-  //const password = user.data?.password
 
   const photographerStatus = useSelector(selectPhotographer).status
 
@@ -288,7 +284,7 @@ export default function CreatePhotographer() {
   }
 
   if ( photographerStatus === 'resolved') {
-    return <Navigate to='/profile'/>
+    return <Navigate to={`/profile/${userId}`}/>
   }
   
   return (
