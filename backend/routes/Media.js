@@ -7,7 +7,7 @@ const multer = require('../middleware/multer-config')
 
 router.post('/private/', auth, multer, mediaCtrl.createMedia)
 router.get('/:userId', mediaCtrl.getAllMediaOfOnePhotographer)
-router.get('/:id', mediaCtrl.getOneMedia)
+router.get('/private/:id', auth, mediaCtrl.getOneMedia)
 router.put('/private/:id', auth, multer, mediaCtrl.modifyOneMedia)
 router.delete('/private/:id', auth, mediaCtrl.deleteOneMedia)
 
