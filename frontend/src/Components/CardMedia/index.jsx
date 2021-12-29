@@ -1,10 +1,11 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-export default function CardMedia({index, title, mediaUrl, price, tags, likes}) {
+export default function CardMedia({ index, title, mediaUrl, price, tags, likes, mediaId }) {
+  const path = `/modify_media/${mediaId}`
   return (
     <div className='mediasInside'>
-      <Link to="" className='lien__media'>
+      <Link to={path} className='lien__media'>
         <img className='media__photo' src={mediaUrl} alt={title}/>
         {/* <video poster="" className='media__photo' src={mediaUrl} alt={title}/> */}
       </Link>
