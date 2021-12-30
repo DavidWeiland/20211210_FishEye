@@ -46,22 +46,21 @@ export default function Profile() {
   
   const user = useSelector(selectUser)
   const userStatus = user.status
-  //const userId = user.data?.userId
-  const token = user.data?.token
+  const userIdOfStore = user.data?.userId
   const mediaStatus = useSelector(selectMedia).status
 
   useEffect(() => {
-    getOnePhotographer(store, userId, token)
+    getOnePhotographer(store, userId)
     getAllMediasOfOnePhotographer(store,userId)
-  }, [ store, userId, token, mediaStatus ])
+  }, [ store, userId, mediaStatus ])
+
   const mediasData = useSelector(selectMedias).data
 
   const photographer = useSelector(selectPhotographer)
-
   if ( photographer.data?.message === 'Photographer modified !') {
-    getOnePhotographer(store, userId, token)
+    getOnePhotographer(store, userId)
   }
-
+  
   let Photographer = {
     name: photographer.data?.name,
     city: photographer.data?.city,
@@ -101,10 +100,16 @@ export default function Profile() {
             :null
             }
           </div>
-          <div className ='vignet__photographe--info vignet__photographe--btn'>
-            <button className="btn__contact" value='modify' onClick={Edit}>
-              Profile Editor
-            </button>
+          <div className='vignet__photographe--info vignet__photographe--btn'>
+            {userIdOfStore === userId ? (
+              <button className="btn__contact" value='modify' onClick={Edit}>
+                Editeur de Profile
+              </button>
+            ): (
+              <button className="btn__contact" value='contact' onClick={Edit}>
+                Contactez-moi
+              </button>
+            )}
           </div>
           <div className="vignet__photographe--info vignet__photographe--photo">
             <VignetPhoto src={Photographer.portraitUrl} alt={Photographer.name} />
@@ -116,7 +121,7 @@ export default function Profile() {
         </article>
         <article className="plage__media">
         <div className='medias'>
-          <div className='mediasInside mediasInside-plus' onClick={addAMedia}>
+          <div className='mediasInside mediasInside-plus' onClick={addAMedia} style={{display:(userIdOfStore === userId) ? ("flex"):("none")}}>
             <i className='fa fa-plus'/>
           </div>
           {mediasData?.map(({ index, title, likes, mediaUrl, _id }) => (

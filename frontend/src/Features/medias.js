@@ -52,7 +52,7 @@ export async function getAllMediasOfOnePhotographer(store, userId) {
   const status = selectMedias(store.getState()).status
   const axiosBody = {
     method: 'get',
-    url: `http://localhost:3001/api/media/${userId}`,
+    url: `http://localhost:3001/api/media/all/${userId}`,
   }
   if (status === 'pending' || status === 'updating') {
     return

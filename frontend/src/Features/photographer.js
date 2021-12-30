@@ -57,12 +57,11 @@ const { actions, reducer } = createSlice({
   },
 })
 
-export async function getOnePhotographer(store, userId, token) {
+export async function getOnePhotographer(store, userId) {
   const status = selectPhotographer(store.getState()).status
   const axiosBody = {
     method: 'get',
-    url: `http://localhost:3001/api/photographer/private/${userId}`,
-    headers:{'authorization': `Bearer ${token}`}
+    url: `http://localhost:3001/api/photographer/${userId}`,
   }
   if (status === 'pending' || status === 'updating') {
     return
@@ -85,9 +84,9 @@ export async function createOnePhotographer(store, thing, image, token) {
   
   const axiosBody = {
     method: 'post',
-    url: `http://localhost:3001/api/photographer/private`,
+    url: `http://localhost:3001/api/photographer/`,
     data: body,
-    headers: { 'authorization': `Bearer ${token}` },
+    headers: { authorization: `Bearer ${token}` },
   }
   if (status === 'pending' || status === 'updating') {
     return
@@ -115,7 +114,7 @@ export async function modifyOnePhotographer(store, photographerId, token, image,
   }
   const axiosBody = {
     method: 'put',
-    url: `http://localhost:3001/api/photographer/private/${photographerId}`,
+    url: `http://localhost:3001/api/photographer/${photographerId}`,
     headers: { authorization: `Bearer ${token}` },
     data: body
   }
