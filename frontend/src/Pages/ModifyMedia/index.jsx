@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { modifyOneMedia } from '../../Features/media'
+import { modifyOneMedia, deleteOneMedia } from '../../Features/media'
 import { useStore, useSelector } from 'react-redux'
 import { selectMedias, selectUser } from '../../Utils/selectors'
 import styled from 'styled-components'
@@ -242,8 +242,12 @@ export default function ModifyMedia() {
       price
     }
     modifyOneMedia(store, mediaId, token, mediaUrl, body)
-    const path = `/profile/${userId}`
-    navigate(path)
+    navigate(`/profile/${userId}`)
+  }
+
+  const deleteMedia = () => {
+    deleteOneMedia(store, mediaId, token)
+    navigate(`/profile/${userId}`)
   }
   
   if ( mediasStatus === 'pending' || mediasStatus === 'updating') {
@@ -328,6 +332,9 @@ export default function ModifyMedia() {
             <div className='vignet__photographe--info vignet__photographe--btn'>
               <button className="btn__contact" value='modify' onClick={modify}>
                 Sauvegarder
+              </button>
+              <button className="btn__contact" value='modify' onClick={deleteMedia}>
+                Supprimer
               </button>
             </div>
             <div className="vignet__photographe--info vignet__photographe--photo">

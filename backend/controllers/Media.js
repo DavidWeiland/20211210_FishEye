@@ -36,18 +36,18 @@ exports.modifyOneMedia = (req, res, next) => {
 
 exports.deleteOneMedia = (req, res, next) => {
   Media.findOne({ _id: req.params.id })
-    .then(thing => {
-      if (!thing) {
+    .then(media => {
+      if (!media) {
         return res.status(404).json({
           error: new Error('Media not found')
         })
       }
-      if (thing.userId !== req.auth.userId) {
+      if (media.userId !== req.auth.userId) {
         return res.status(401).json({
           error: new Error('request non authorized')
         })
       }
-      const filename = thing.mediaUrl.split('/images/')[1]
+      const filename = media.mediaUrl.split('/images/')[1]
       fs.unlink(`images/${filename}`, () => {
         Media.deleteOne({ _id: req.params.id })
           .then(() => res.status(200).json({message: 'Media deleted !'}))
