@@ -13,7 +13,7 @@ const VignetForm=styled.form`
   align-items: center;
   text-decoration: none;
   list-style-type: none;
-  width: 40%;
+  width: 60%;
   height: auto;
 `
 const BtnOption = styled.div`
