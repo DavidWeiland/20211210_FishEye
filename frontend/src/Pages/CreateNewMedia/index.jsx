@@ -14,7 +14,7 @@ const VignetPhoto = styled.img`
   width: 200px;
   height: 200px;
   object-fit: cover;
-  border-radius: 100%;
+  border-radius: 5px;
   background: #C4C4C4;
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.25);
 `
@@ -26,13 +26,14 @@ const CreateInputWrapper = styled.div`
   align-items: flex-start;
   justify-content: flex-start;
 `
-const CreateStyledInputTitle = styled.input`
+const CreateStyledInputTitle = styled.textarea`
   margin:1%;
   margin-top: 20px;
   border:0;
   width:100%;
-  height:40px;
-  font-size: 36px;
+  height:48px;
+  font-family: 'DM sans', arial;
+  font-size: 20px;
   font-weight : bold;
   color:#D3573C;
   box-shadow: inset 0px 4px 12px rgba(0, 0, 0, 0.25);
@@ -41,7 +42,7 @@ const CreateStyledInputTitle = styled.input`
     background-color:rgba(0, 0, 0, 0.2);
     };
 `
-const CreateStyledInputCity = styled.input`
+const CreateStyledInputTagline = styled.input`
   margin:1%;
   border:0;
   width:100%;
@@ -55,20 +56,7 @@ const CreateStyledInputCity = styled.input`
     background-color:rgba(0, 0, 0, 0.2);
     };
 `
-const CreateStyledInputTagline = styled.input`
-  margin:1%;
-  border:0;
-  width:100%;
-  height:13px;
-  font-size: 11px;
-  font-weight : normal;
-  color:#000000;
-  box-shadow: inset 0px 4px 12px rgba(0, 0, 0, 0.25);
-  padding-left:5px;
-  &:focus{
-    background-color:rgba(0, 0, 0, 0.2);
-    };
-`
+
 const CreateStyledInput = styled.input`
   margin:1%;
   border:0;
@@ -122,7 +110,7 @@ export default function CreateMedia() {
   const [ date, setDate ] = useState('')
   const [ price, setPrice ] = useState('')
   
-  const [mediaShower, setMediaShower] = useState('')
+  const [ mediaShower, setMediaShower ] = useState('')
   
   const portrait = (tags.indexOf('portrait') >= 0) ? true : false
   const art = (tags.indexOf('art') >= 0) ? true : false
@@ -221,23 +209,25 @@ export default function CreateMedia() {
   }
                     
   const create = () => {
-    const MediaBody = {
-      userId,
-      title,
-      mediaUrl:'',
-      tags,
-      likes,
-      date,
-      price
+    if (title && mediaUrl && tags && likes && date && price) {
+      const MediaBody = {
+        userId,
+        title,
+        mediaUrl: '',
+        tags,
+        likes,
+        date,
+        price
+      }
+      createOneMedia(store, MediaBody, mediaUrl, token)
+      navigate(`/profile/${userId}`)
     }
-    createOneMedia(store, MediaBody, mediaUrl, token)
-    navigate(`/profile/${userId}`)
   }
   
   if ( userStatus === 'pending' || userStatus === 'updating') {
     return (<div><h1>loading</h1></div>)
   }
-  
+
   return (
     <div>
       <Article className="page__photographe--info">
@@ -247,32 +237,28 @@ export default function CreateMedia() {
             <div className="vignet__photographe--info vignet__photographe--label">
               <CreateInputWrapper>
                 <CreateStyledInputTitle
-                type="text"
+                  type="text"
+                  rows="2"
+                  cols="20"
+                  wrap="hard"
                 id="title"
                 name="title"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                placeholder='Title'
+                  placeholder='Title'
+                  required
+                  autoFocus
                 />
               </CreateInputWrapper>
               <CreateInputWrapper>
-                <CreateStyledInputCity
+                <CreateStyledInputTagline
                   type="date"
                   id="date"
                   name="date"
                   value={date}
                   onChange={(e) => setDate(e.target.value)}
                   placeholder='Date'
-                />
-              </CreateInputWrapper>
-              <CreateInputWrapper>
-                <CreateStyledInputCity
-                  type="number"
-                  id="price"
-                  name="price"
-                  value={price}
-                  onChange={(e) => setPrice(e.target.value)}
-                  placeholder='Price'
+                  required
                 />
               </CreateInputWrapper>
               <CreateInputWrapper>
@@ -283,6 +269,7 @@ export default function CreateMedia() {
                   value={likes}
                   onChange={(e) => setLikes(e.target.value)}
                   placeholder='Likes'
+                  required
                 />
               </CreateInputWrapper>
               <CreateInputWrapper>
@@ -292,7 +279,8 @@ export default function CreateMedia() {
                   name="price"
                   value={price}
                   onChange={(e) => setPrice(e.target.value)}
-                  placeholder='price'
+                  placeholder='Price'
+                  required
                 />
               </CreateInputWrapper>
               <form aria-label="tag" id="tag" className="form__option">
@@ -325,8 +313,11 @@ export default function CreateMedia() {
               </form>
             </div>
             <div className='vignet__photographe--info vignet__photographe--btn'>
-              <button className="btn__contact" value='modify' onClick={create}>
-                Sauvegarder
+                <button className="btn__contact"  value='create' onClick={create}>
+                  Sauvegarder
+                </button>
+              <button className="btn__contact" value='modify' onClick={()=>navigate(`/profile/${userId}`)}>
+                Cancel
               </button>
             </div>
             <div className="vignet__photographe--info vignet__photographe--photo">
