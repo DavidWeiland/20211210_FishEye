@@ -56,7 +56,7 @@ export default function Header() {
   const navigate = useNavigate()
 
   const userId = useSelector(selectUser).data?.userId
-  const name = useSelector(selectPhotographer).data?.name || 'Se connecter'
+  const name = useSelector(selectPhotographer).data?.name
 
   const reseting = () => {
     resetPhotographer(store)
@@ -67,15 +67,20 @@ export default function Header() {
   return (
     <StyledBanner>
       <StyledDivConnect>
-          <span>{name}</span>
         {(userId) ? (
-          <div onClick={reseting}>
-            <IconBanner className='fa fa-sign-out'/>
-          </div>
+          <StyledDivConnect>
+            <span>{name} </span>
+            <div onClick={reseting}>
+              <IconBanner className='fa fa-sign-out'/>
+            </div>
+          </StyledDivConnect>
         ) : (
-          <Link to='/login'>
-            <IconBanner className='fa fa-user-circle'/>
-          </Link>
+          <StyledDivConnect>
+            <span>Se connecter </span>
+            <Link to='/login'>
+                <IconBanner className='fa fa-user-circle'/>
+            </Link>
+          </StyledDivConnect>
         )}
       </StyledDivConnect>
       <StyledDivLogo>

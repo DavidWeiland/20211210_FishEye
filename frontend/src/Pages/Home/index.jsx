@@ -227,10 +227,10 @@ export default function Home() {
           </section>
         ) : (
           <section>
-            {photographers.map(({ index, _id, name, city, country, tags, tagline, price, portraitUrl }) => (
+            {photographers.map(({ index, userId, name, city, country, tags, tagline, price, portraitUrl }) => (
               <Card
                 key={`${index}-${name}`}
-                id={_id}
+                id={userId}
                 name={name}
                 city={city}
                 country={country}

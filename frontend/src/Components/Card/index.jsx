@@ -60,7 +60,7 @@ function Card({ id, name, city, country, tags, tagline, price, portraitUrl }) {
 
   return (
     <VignetContainer>
-      <Vignet tabIndex="0" role='link' aria-label={name} data-cible="i" id={id} href={`/photographer/${id}`}>
+      <Vignet tabIndex="0" role='link' aria-label={name} data-cible="i" id={id} href={`/profile/${id}`}>
         <VignetPhoto src={portraitUrl} alt='' />
         <VignetTitle>
           {name}
