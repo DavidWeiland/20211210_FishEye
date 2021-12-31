@@ -24,14 +24,29 @@ exports.getOneMedia = (req, res, next) => {
   .then((media) => res.status(200).json(media))
   .catch(error=> res.status(400).json({error}))
 }
+
 exports.modifyOneMedia = (req, res, next) => {
-  const mediaObject = req.file ? {
-    ...JSON.parse(req.body.thing),
-    mediaUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
-  } : { ...req.body }
-  Media.updateOne({ _id: req.params.id },{...mediaObject, _id:req.params.id})
-  .then(() => res.status(200).json({message:'Media modified !'}))
-  .catch(error=> res.status(400).json({error}))
+  if (req.file) {
+    const mediaObject = {
+      ...JSON.parse(req.body.thing),
+      mediaUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+    }
+    Media.findOne({ _id: req.params.id })
+      .then(media => {
+        const filename = media.mediaUrl.split('/images/')[ 1 ]
+        fs.unlink(`images/${filename}`, () => {
+          Media.updateOne({ _id: req.params.id }, { ...mediaObject, _id: req.params.id })
+            .then(() => res.status(200).json({ message: 'Media modified !' }))
+            .catch(error => res.status(400).json({ error }))
+        })
+      })
+      .catch (error => res.status(500).json({ error }))
+  } else {
+    const mediaObject = { ...req.body }
+    Media.updateOne({ _id: req.params.id },{...mediaObject, _id:req.params.id})
+    .then(() => res.status(200).json({message:'Media modified !'}))
+    .catch(error=> res.status(400).json({error}))
+  }
 }
 
 exports.deleteOneMedia = (req, res, next) => {
