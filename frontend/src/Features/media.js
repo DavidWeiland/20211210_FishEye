@@ -124,6 +124,26 @@ export async function modifyOneMedia(store, mediaId, token, image, thing) {
   }
 }
 
+export async function likeOneMedia(store, mediaId, body) {
+  const status = selectMedia(store.getState()).status
+  const axiosBody = {
+    method: 'put',
+    url: `http://localhost:3001/api/media/public/${mediaId}`,
+    data: body
+  }
+  if (status === 'pending' || status === 'updating') {
+    return
+  }
+  store.dispatch(actions.fetching())
+  try {
+    const response = await axios(axiosBody)
+    const data = await response.data
+    store.dispatch(actions.resolved(data))
+  } catch (error) {
+    store.dispatch(actions.rejected(error))
+  }
+}
+
 export async function deleteOneMedia(store, id, token) {
   const status = selectMedia(store.getState()).status
   const axiosBody = {
