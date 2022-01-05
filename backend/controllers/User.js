@@ -32,7 +32,7 @@ exports.login = (req, res, next) => {
             userId: user._id,
             token: jwt.sign(
               { userId: user._id },
-              'FishEye-API_20211208-Auth__Token',
+              process.env.DECODE_TOKEN,
               { expiresIn:'24h'}
             )
           })

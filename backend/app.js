@@ -1,11 +1,15 @@
 const express = require('express')
 const mongoose = require('mongoose')
+const dotenv = require('dotenv').config()
 const mediaRoutes = require('./routes/Media')
 const photographerRoutes = require('./routes/Photographer')
 const userRoutes = require('./routes/User')
 const path = require('path')
 
-mongoose.connect('mongodb+srv://davidWeiland:Bwqtthc1@cluster0.bdouf.mongodb.net/FishEyeDatabase?retryWrites=true&w=majority', {
+mongoose.connect(process.env.DB_URI, {
+  dbName: process.env.DB_NAME,
+  user: process.env.DB_USER,
+  pass: process.env.DB_PASS,
   useNewUrlParser: true,
   useUnifiedTopology:true
 })
