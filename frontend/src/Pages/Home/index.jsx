@@ -1,26 +1,11 @@
 import { useState, useEffect } from 'react'
-//import { Navigate } from 'react-router'
-//import { Link } from 'react-router-dom'
 import { useStore, useSelector } from 'react-redux'
 import { selectPhotographers } from '../../Utils/selectors'
 import { getAllPhotographers } from '../../Features/photographers'
-
-//import styled from 'styled-components'
-//import { getOnePhotographer, createOnePhotographer, modifyOnePhotographer } from '../../Features/photographer'
 import '../../Utils/Styles/style.css'
 import '../../Utils/Styles/home.css'
 
 import Card from '../../Components/Card'
-
-/* const AppWrapper = styled.div`
-  margin: auto;
-  height: 100vh;
-  width: 80%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  ` */
   
 export default function Home() {
     const store = useStore()
@@ -139,43 +124,6 @@ export default function Home() {
     })
   })
 
-
-  /* 
-  
-  
-  const modifyPhotographer = () => {
-    const PhotographerBody = {
-      userId:PhotographerUserId,
-      name:"Tracy Galindo",
-      city:"Congis",
-      country:"France",
-      tags:["portrait", "architecture"],
-      tagline:"Tout est beau, quand on regarde",
-      price:500,
-      portrait: ''
-    }
-    const objectData = new FormData()
-    objectData.append('thing', JSON.stringify(PhotographerBody))
-    objectData.append('image', portraitUrl, PhotographerBody.name)
-    modifyOnePhotographer(store, PhotographerId, Token, objectData)
-  } */
-
-  /* if (UserStatus === 'rejected') {
-    return (<div><h1>Error</h1></div>)
-  }
-
-  if (UserStatus === 'pending' || PhotographerStatus === 'updating') {
-    return (<div><h1>loading</h1></div>)
-  }
-
-  if (UserStatus === 'resolved') {
-    return <Navigate to='/profile'/>
-  } */
-
-  //transfert sur tagsmocks pour faire un map dans HomeHeader
-  //puis mettre la logique de selection dans home
-
-
   return (
     <div>
       <div className='headerHomePageNav'>
@@ -227,7 +175,7 @@ export default function Home() {
           </section>
         ) : (
           <section>
-            {photographers.map(({ index, userId, name, city, country, tags, tagline, price, portraitUrl }) => (
+                {photographers.map(({ index, userId, name, city, country, tags, tagline, price, portraitUrl }) => (
               <Card
                 key={`${index}-${name}`}
                 id={userId}
@@ -243,39 +191,6 @@ export default function Home() {
           </section>
         )
       )}
-
-    {/*
-      <AppWrapper>
-      <p>- {UserId} -</p>
-      <p>- {PhotographerId} - {PhotographerCity} - {PhotographerTagline} - {PhotographerPortrait} -</p>
-      {(UserStatus === 'resolved') ? (
-        <div>
-          <div>
-            <input type="file" id="file_profile" name="file" accept='image/png, image/jpeg, image/jpg, video/mpeg, video/mp4' onChange={(e)=>setPortraitUrl(e.target.files[0])}/>
-          </div>
-          <div style={{margin:"20px"}}>
-            <button style={{margin:"10px"}} onClick={createPhotographer}>New photographer</button>
-            <button style={{margin:"10px"}} onClick={modifyPhotographer}>Modify photographer</button>
-            <button style={{margin:"10px"}} onClick={fetchAllPhotographers}>Get All photographer</button>
-            <button style={{margin:"10px"}} onClick={fetchOnePhotographer}>Get One photographer</button>
-          </div>
-        </div>
-      ) : (
-        <div style={{ margin: "20px" }}>
-          <button style={{margin:"10px"}} onClick={create}>New user</button>
-          <button style={{margin:"10px"}} onClick={connect}>Login</button>
-        </div>
-      )}
-      <button style={{margin:"10px"}} onClick={connect}>Delete One photographer</button>
-      <div style={{margin:"20px"}}>
-        <button style={{ margin: "10px" }}>New media</button>
-        <button style={{ margin: "10px" }}>Modify media</button>
-        <button style={{ margin: "10px" }}>Get All media</button>
-        <button style={{ margin: "10px" }}>Get One media</button>
-        <button style={{ margin: "10px" }}>Delete One media</button>
-      </div>
-    </AppWrapper>
-    */}
     </div>
   ) 
 }
