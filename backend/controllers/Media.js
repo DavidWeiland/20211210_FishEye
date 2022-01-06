@@ -50,7 +50,7 @@ exports.modifyOneMedia = (req, res, next) => {
 }
 
 exports.likeOneMedia = (req, res, next) => {
-  Media.updateOne({ _id: req.params.id }, { ...req.body, _id:req.params.id})
+  Media.updateOne({ _id: req.params.id }, { likes:req.body.likes, _id:req.params.id})
     .then(() => res.status(200).json({message:'Media modified !'}))
     .catch(error=> res.status(400).json({error}))
 }

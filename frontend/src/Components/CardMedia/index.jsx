@@ -14,7 +14,6 @@ export default function CardMedia({ title, mediaUrl, likes, mediaId }) {
     const body = {
       likes: ++likes
     }
-    console.log(body)
     likeOneMedia(store, mediaId, body)
   }
 
