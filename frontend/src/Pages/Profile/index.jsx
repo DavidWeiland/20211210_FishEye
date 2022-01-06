@@ -8,7 +8,7 @@ import '../../Utils/Styles/style.css'
 import TagsComponent from '../../Components/TagsComponent'
 import { Navigate, useNavigate, useParams } from 'react-router'
 import CardMedia from '../../Components/CardMedia'
-import ModifyPhotographer from '../ModifyPhotographer'
+import ModifyPhotographer from '../../Components/ModifyPhotographer'
 
 const VignetTitle = styled.h1`
   font-size: 36px;

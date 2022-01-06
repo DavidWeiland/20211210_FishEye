@@ -8,7 +8,6 @@ import Home from './Pages/Home';
 import LoginPage from './Pages/Login';
 import Profile from './Pages/Profile';
 import NewPhotographer from './Pages/CreateNewPhotographer'
-//import ModifyPhotographer from './Pages/ModifyPhotographer';
 import NewMedia from './Pages/CreateNewMedia'
 import ModifyMedia from './Pages/ModifyMedia';
 import Error from './Pages/Error'
