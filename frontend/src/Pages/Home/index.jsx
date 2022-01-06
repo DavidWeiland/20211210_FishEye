@@ -4,7 +4,6 @@ import { selectPhotographers } from '../../Utils/selectors'
 import { getAllPhotographers } from '../../Features/photographers'
 import '../../Utils/Styles/style.css'
 import '../../Utils/Styles/home.css'
-
 import Card from '../../Components/Card'
   
 export default function Home() {
@@ -105,7 +104,6 @@ export default function Home() {
     setTags(newTags)
   }
 
-  
   //affiche une selection de photographes en fonction des tags
   let photographers = []
   photographersData?.forEach(photographer => {
@@ -123,6 +121,22 @@ export default function Home() {
       }
     })
   })
+
+  if (photographersStatus === 'rejected') {
+    return (
+      <section>
+        <h1>Erreur de chargement des photographes, veuillez contacter le web-master - 06 62 50 51 75</h1>
+      </section>
+    )
+  }
+
+  if (photographersStatus === 'pending' || photographersStatus === 'updating') {
+    return (
+      <section>
+        <h1>Loading</h1>
+      </section>
+    )
+  }
 
   return (
     <div>
@@ -163,34 +177,21 @@ export default function Home() {
           <h1 className='titlePrincipal'>Nos Photographes</h1>
         </div>
       </div>
-
-      {(photographersStatus === 'rejected') ? (
-        <section>
-          <h1>Erreur de chargement des photographes, veuillez contacter le web-master - 06 62 50 51 75</h1>
-        </section>
-      ) : (
-        (photographersStatus === 'pending' || photographersStatus === 'updating') ? (
-          <section>
-            <h1>loading</h1>
-          </section>
-        ) : (
-          <section>
-                {photographers.map(({ index, userId, name, city, country, tags, tagline, price, portraitUrl }) => (
-              <Card
-                key={`${index}-${name}`}
-                id={userId}
-                name={name}
-                city={city}
-                country={country}
-                tags={tags}
-                tagline={tagline}
-                price={price}
-                portraitUrl={portraitUrl}
-              />
-            ))}
-          </section>
-        )
-      )}
+      <section>
+        {photographers.map(({ index, userId, name, city, country, tags, tagline, price, portraitUrl }) => (
+          <Card
+            key={`${index}-${name}`}
+            id={userId}
+            name={name}
+            city={city}
+            country={country}
+            tags={tags}
+            tagline={tagline}
+            price={price}
+            portraitUrl={portraitUrl}
+          />
+        ))}
+      </section>
     </div>
   ) 
 }
