@@ -34,7 +34,7 @@ export default function CardMedia({ title, mediaUrl, likes, mediaId }) {
           <p className="media__like">{likes}</p>
           <i className= "fa fa-heart"/>
         </div>
-      </div >
+      </div>
     </div>
   )
 }
