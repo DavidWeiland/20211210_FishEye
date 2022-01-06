@@ -4,8 +4,6 @@ import { useStore, useSelector } from 'react-redux'
 import { selectUser, selectPhotographer } from '../../Utils/selectors'
 import styled from 'styled-components'
 import '../../Utils/Styles/style.css'
-//import { useNavigate } from 'react-router'
-
 
 const VignetPhoto = styled.img`
   width: 200px;
@@ -217,7 +215,6 @@ export default function Profile({state, close}) {
     portraitUrl:''
     }
     modifyOnePhotographer(store, photographerId, token, portraitUrl, body)
-    //navigate('/profile')
     close()
   }
 
