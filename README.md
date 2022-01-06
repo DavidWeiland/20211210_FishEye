@@ -6,7 +6,7 @@
 
 # FISHEYE
 
-In parallel with the OpenClassrooms training, resumption of the 6-Fisheye project with 2 objectives: 
+In parallel with the OpenClassrooms training, resumption of the P6-Fisheye project with 2 objectives: 
 - Backend: creation of an API with Express.js and MongoDB
 - Frontend : Fisheye app with react and redux
 
