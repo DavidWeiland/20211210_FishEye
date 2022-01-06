@@ -57,7 +57,6 @@ const VignetPrice = styled.p`
 `
 
 function Card({ id, name, city, country, tags, tagline, price, portraitUrl }) {
-
   return (
     <VignetContainer>
       <Vignet tabIndex="0" role='link' aria-label={name} data-cible="i" id={id} href={`/profile/${id}`}>
@@ -75,16 +74,6 @@ function Card({ id, name, city, country, tags, tagline, price, portraitUrl }) {
               {price} €/jour,  
         </VignetPrice>
         <TagsComponent tags={tags}/>
-        {/* <VignetForm>
-          {tags.map((tag, index) => ( 
-            <BtnOption
-            key = {`${index}-${tag}`} tag={tag}>
-              <LabelOption>
-              {`#${tag}`}
-              </LabelOption>
-            </BtnOption>
-          ))}
-        </VignetForm> */}
       </Vignet>
     </VignetContainer>
   )
