@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import DefaultPicture from '../../Assets/Icons/user-circle.svg'
+import DefaultPicture from '../../Assets/Images/user-circle.svg'
 import styled from 'styled-components'
 import TagsComponent from '../TagsComponent'
 
