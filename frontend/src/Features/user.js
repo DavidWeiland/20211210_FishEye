@@ -106,6 +106,6 @@ export async function resetUser(store) {
   store.dispatch(actions.reset())
 }
 
-export const { resolved } = actions
+export const { fetching, resolved, rejected, reset } = actions
 
 export default reducer

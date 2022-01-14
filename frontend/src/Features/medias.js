@@ -67,4 +67,5 @@ export async function getAllMediasOfOnePhotographer(store, userId) {
   }
 }
 
+export const { fetching, resolved, rejected } = actions
 export default reducer

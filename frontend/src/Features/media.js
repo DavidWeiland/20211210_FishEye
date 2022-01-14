@@ -164,4 +164,5 @@ export async function deleteOneMedia(store, id, token) {
   }
 }
 
+export const { fetching, resolved, rejected } = actions
 export default reducer

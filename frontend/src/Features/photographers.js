@@ -67,4 +67,5 @@ export async function getAllPhotographers(store) {
   }
 }
 
+export const { fetching, resolved, rejected } = actions
 export default reducer

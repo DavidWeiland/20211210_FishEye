@@ -140,4 +140,5 @@ export async function resetPhotographer(store) {
   store.dispatch(actions.reset())
 }
 
+export const { fetching, resolved, rejected } = actions
 export default reducer

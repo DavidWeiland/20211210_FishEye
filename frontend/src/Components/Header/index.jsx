@@ -66,7 +66,7 @@ export default function Header() {
 
   return (
     <StyledBanner>
-      <StyledDivConnect>
+      <StyledDivConnect data-testid="TestConnect">
         {(userId) ? (
           <StyledDivConnect>
             <span>{name} </span>
