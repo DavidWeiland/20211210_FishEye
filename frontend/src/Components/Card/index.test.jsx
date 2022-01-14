@@ -1,31 +1,30 @@
-import { render, unmountComponentAtNode } from 'react-dom'
-import { act } from 'react-dom/test-utils'
-import Card from './index'
-
-let container = null
-beforeEach(() => {
-  container = document.createElement('div')
-  document.body.appendChild(container)
-})
-afterEach(() => {
-  unmountComponentAtNode(container)
-  container.remove()
-  container = null
-})
+import { render, screen } from '@testing-library/react'
+import Card from './'
 
 describe('When component is called,', () => {
   it("photographer's name isn't displayed if there are no props", () => {
-    act(() => {
-      render(<Card tags={[]} />, container)
-    })
-    expect(container.textContent).toBe(',  €/jour,')
+
+    render(
+      <Card
+        tags={[]} 
+      />
+    )
+    
+    const cardTitle = screen.getByRole('heading')
+    expect(cardTitle.textContent).toBe('')
   
   })
   
   it("photographer's name is displayed if there are props", () => {
-    act(() => {
-        render(<Card tags={["Portrait", "Art"]} name='David' />, container)
-    })
-    expect(container.textContent).toBe('David,  €/jour,#Portrait#Art')
+
+    render(
+      <Card
+        tags={[ "Portrait", "Art" ]}
+        name='David Weiland'
+      />
+    )
+
+    const cardTitle = screen.getByRole('heading')
+    expect(cardTitle.textContent).toBe('David Weiland')
   })
 })
